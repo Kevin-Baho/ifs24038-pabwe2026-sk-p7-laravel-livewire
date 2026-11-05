@@ -34,6 +34,8 @@ class AdminLivewireTest extends TestCase
 
         $this->actingAs($this->admin);
 
+        $this->get(route('admin.users'))->assertStatus(200);
+
         Livewire::test(UserList::class)
             ->assertSee('Charlie User')
             ->assertSee('Delta Member')

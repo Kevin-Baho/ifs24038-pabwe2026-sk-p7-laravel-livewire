@@ -42,6 +42,8 @@ class StockDetailLivewireTest extends TestCase
         Storage::fake('public');
         $this->actingAs($this->member);
 
+        $this->get(route('stocks.detail', $this->stock->id))->assertStatus(200);
+
         $newCover = UploadedFile::fake()->image('mouse.jpg');
 
         Livewire::test(StockDetail::class, ['stock' => $this->stock])

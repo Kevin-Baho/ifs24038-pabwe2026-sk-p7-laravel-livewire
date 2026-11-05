@@ -28,6 +28,8 @@ class ProfileLivewireTest extends TestCase
 
         $this->actingAs($user);
 
+        $this->get(route('profile'))->assertStatus(200);
+
         $photo = UploadedFile::fake()->image('avatar.jpg');
 
         Livewire::test(Profile::class)

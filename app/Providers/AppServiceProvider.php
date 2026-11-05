@@ -11,6 +11,7 @@ use App\Features\Stock\Policies\StockPolicy;
 use App\Features\Stock\Repositories\StockRepository;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,5 +35,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Register policies
         Gate::policy(Stock::class, StockPolicy::class);
+
+        // Register layout hint path
+        View::addNamespace('layouts', resource_path('views/components/layouts'));
     }
 }

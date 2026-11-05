@@ -17,6 +17,16 @@ class AuthLivewireTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_login_page_renders_successfully(): void
+    {
+        $this->get('/login')
+            ->assertStatus(200)
+            ->assertSee('Masuk ke akun Anda')
+            ->assertSee('id="login-username"', false)
+            ->assertSee('id="login-password"', false)
+            ->assertSee('id="login-submit"', false);
+    }
+
     public function test_login_validation_and_failures(): void
     {
         Livewire::test(Login::class)

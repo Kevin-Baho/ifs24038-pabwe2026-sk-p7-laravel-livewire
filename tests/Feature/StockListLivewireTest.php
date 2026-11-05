@@ -35,6 +35,8 @@ class StockListLivewireTest extends TestCase
 
         $this->actingAs($this->member);
 
+        $this->get(route('stocks.index'))->assertStatus(200);
+
         Livewire::test(StockList::class)
             ->assertStatus(200)
             ->assertViewHas('stocks', fn ($stocks) => $stocks->total() === 15);
