@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Features\Admin\Livewire;
 
 use App\Features\Admin\Services\AdminUserService;
+use App\Features\Stock\Services\StockExcelService;
 use App\Models\User;
 use Livewire\Component;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminUserStockList extends Component
 {
@@ -20,6 +22,11 @@ class AdminUserStockList extends Component
         } else {
             $this->targetUser = $service->getUserById((int) $user);
         }
+    }
+
+    public function exportExcel(StockExcelService $excelService): StreamedResponse
+    {
+        return $excelService->export($this->targetUser->stocks()->get());
     }
 
     public function render(AdminUserService $service): \Illuminate\View\View

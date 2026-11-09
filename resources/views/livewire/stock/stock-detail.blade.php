@@ -1,157 +1,308 @@
-<x-layouts.app>
-    <div class="max-w-4xl mx-auto">
-        <!-- Back link -->
-        <div class="mb-4">
-            <a href="{{ route('stocks.index') }}" class="text-blue-600 hover:text-blue-800 text-sm">← Kembali ke Daftar Stok</a>
-        </div>
+<div>
+    <!-- Back Navigation & Actions -->
+    <div class="flex items-center justify-between gap-4 mb-6">
+        <a href="{{ route('stocks.index') }}"
+           class="inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-indigo-400 transition">
+            <span>&larr;</span>
+            <span>Kembali ke Inventaris</span>
+        </a>
 
-        @if(session('success'))
-            <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded text-green-700 text-sm">{{ session('success') }}</div>
-        @endif
-
-        @if($isReadOnly)
-            <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded text-blue-700 text-sm">
-                👁️ Mode baca saja (Admin)
+        @if(!$isReadOnly)
+            <div class="flex items-center gap-2">
+                <button wire:click="openEditModal"
+                        class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition flex items-center gap-1.5">
+                    <span>✏️</span>
+                    <span>Edit Informasi Barang</span>
+                </button>
+                <button wire:click="delete"
+                        wire:confirm="Yakin ingin menghapus stok '{{ addslashes($stock->name) }}'?"
+                        class="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-950/40 hover:bg-rose-900/50 text-rose-300 border border-rose-900/50 transition">
+                    Hapus
+                </button>
             </div>
+        @else
+            <span class="px-2.5 py-1 rounded-md text-xs font-mono uppercase bg-amber-950/40 text-amber-300 border border-amber-800/50">
+                Mode Read-Only (Admin)
+            </span>
         @endif
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Left: Cover Image + Status -->
-            <div class="md:col-span-1 space-y-4">
-                <!-- Cover Image -->
-                <div class="bg-white shadow rounded-lg p-4">
+    <!-- MAIN GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- LEFT: Hero Cover Image & Quick Stepper -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Cover Hero Container -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+                <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center group">
                     @if($stock->cover_image_path)
-                        <img src="{{ Storage::url($stock->cover_image_path) }}"
-                             alt="{{ $stock->name }}"
-                             class="w-full h-48 object-cover rounded-lg">
+                        <img src="{{ $stock->coverImageUrl() ?? asset('storage/'.$stock->cover_image_path) }}" alt="{{ $stock->name }}"
+                             class="w-full h-full object-cover">
                     @else
-                        <div class="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-4xl">
-                            📦
+                        <div class="text-center p-6">
+                            <span class="text-5xl">📦</span>
+                            <p class="mt-2 text-xs text-slate-500 font-mono">Belum ada foto cover</p>
                         </div>
                     @endif
-                </div>
 
-                <!-- Status Card -->
-                <div class="bg-white shadow rounded-lg p-4 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-gray-600">Status</span>
-                        <span class="px-3 py-1 text-sm rounded-full {{ $stock->status->badgeClass() }}">
-                            {{ $stock->status->label() }}
-                        </span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-gray-600">Jumlah</span>
-                        <div class="flex items-center gap-2">
-                            @if(!$isReadOnly)
-                                <button wire:click="decrement"
-                                        class="w-7 h-7 rounded bg-red-100 hover:bg-red-200 text-red-600 font-bold flex items-center justify-center">−</button>
-                            @endif
-                            <span class="text-xl font-bold text-gray-800">{{ $stock->quantity }}</span>
-                            @if(!$isReadOnly)
-                                <button wire:click="increment"
-                                        class="w-7 h-7 rounded bg-green-100 hover:bg-green-200 text-green-600 font-bold flex items-center justify-center">+</button>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="font-medium text-gray-600">Unit</span>
-                        <span class="text-gray-800">{{ $stock->unit }}</span>
-                    </div>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="font-medium text-gray-600">Min Stok</span>
-                        <span class="text-gray-800">{{ $stock->min_stock }}</span>
-                    </div>
-                    @if($stock->price !== null)
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="font-medium text-gray-600">Harga</span>
-                            <span class="text-gray-800 font-semibold">Rp {{ number_format((float)$stock->price, 0, ',', '.') }}</span>
-                        </div>
-                    @endif
-                </div>
-
-                <!-- Delete button -->
-                @if(!$isReadOnly)
-                    <button wire:click="delete"
-                            wire:confirm="Yakin ingin menghapus stok '{{ addslashes($stock->name) }}'?"
-                            class="w-full py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700">
-                        🗑️ Hapus Stok
-                    </button>
-                @endif
-            </div>
-
-            <!-- Right: Edit Form -->
-            <div class="md:col-span-2 bg-white shadow rounded-lg p-6">
-                <h1 class="text-xl font-bold text-gray-800 mb-4">{{ $stock->name }}</h1>
-
-                @if($stock->sku)
-                    <p class="text-sm text-gray-500 mb-4">SKU: <span class="font-mono text-gray-700">{{ $stock->sku }}</span></p>
-                @endif
-
-                @if(!$isReadOnly)
-                    <form wire:submit="save" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Nama Produk *</label>
-                            <input type="text" wire:model="name"
-                                   class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
-                            @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">SKU</label>
-                                <input type="text" wire:model="sku"
-                                       class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Unit</label>
-                                <input type="text" wire:model="unit"
-                                       class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Jumlah</label>
-                                <input type="number" wire:model="quantity" min="0"
-                                       class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Min Stok</label>
-                                <input type="number" wire:model="minStock" min="0"
-                                       class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Harga</label>
-                            <input type="number" wire:model="price" min="0" step="0.01"
-                                   class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Deskripsi (Markdown)</label>
-                            <textarea wire:model="description" rows="5"
-                                      class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm font-mono focus:border-blue-500 focus:ring-blue-500">{{ $description }}</textarea>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Ganti Cover Image</label>
-                            <input type="file" wire:model="cover" accept="image/*" class="mt-1 text-sm text-gray-600">
-                            @error('cover') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                        </div>
-                        <div class="flex justify-end">
-                            <button type="submit"
-                                    class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
-                                    wire:loading.attr="disabled">
-                                💾 Simpan Perubahan
+                    @if(!$isReadOnly && $stock->cover_image_path)
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                            <button wire:click="removeCover"
+                                    class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-500 text-white transition">
+                                Hapus Cover
                             </button>
                         </div>
-                    </form>
-                @else
-                    @if($stock->description)
-                        <div class="prose prose-sm max-w-none text-gray-700 mt-4">
-                            {!! nl2br(e($stock->description)) !!}
-                        </div>
-                    @else
-                        <p class="text-sm text-gray-400 italic mt-4">Tidak ada deskripsi.</p>
                     @endif
+                </div>
+
+                @if(!$isReadOnly)
+                    <div class="pt-2 border-t border-slate-800/80">
+                        <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
+                            {{ $stock->cover_image_path ? 'Ganti Cover Barang' : 'Unggah Cover Barang' }}
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <input type="file" wire:model="cover" accept="image/*"
+                                   class="text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer w-full">
+                        </div>
+                        @if($cover)
+                            <button wire:click="updateCover"
+                                    class="mt-2 w-full py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">
+                                Simpan Foto Baru
+                            </button>
+                        @endif
+                        @error('cover') <p class="mt-1.5 text-xs text-rose-400">{{ $message }}</p> @enderror
+                    </div>
                 @endif
+            </div>
+
+            <!-- Big Stepper Card -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Kuantitas Fisik</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium {{ $stock->status->badgeClass() }}">
+                        {{ $stock->status->label() }}
+                    </span>
+                </div>
+
+                <div class="flex items-center justify-between gap-4 py-2">
+                    @if(!$isReadOnly)
+                        <button wire:click="decrement"
+                                title="Kurangi Kuantitas (-1)"
+                                class="w-12 h-12 rounded-xl bg-slate-800 hover:bg-rose-950/60 hover:text-rose-400 hover:border-rose-800 text-slate-200 border border-slate-700 flex items-center justify-center text-xl font-bold transition shadow-sm">
+                            &minus;
+                        </button>
+                    @endif
+
+                    <div class="text-center flex-1">
+                        <span class="text-4xl font-extrabold font-mono tabular-nums text-slate-100">
+                            {{ $stock->quantity }}
+                        </span>
+                        <span class="block text-xs font-mono text-slate-400 mt-1">
+                            {{ $stock->unit }}
+                        </span>
+                    </div>
+
+                    @if(!$isReadOnly)
+                        <button wire:click="increment"
+                                title="Tambah Kuantitas (+1)"
+                                class="w-12 h-12 rounded-xl bg-slate-800 hover:bg-emerald-950/60 hover:text-emerald-400 hover:border-emerald-800 text-slate-200 border border-slate-700 flex items-center justify-center text-xl font-bold transition shadow-sm">
+                            &#43;
+                        </button>
+                    @endif
+                </div>
+
+                <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono">
+                    <span>Ambang Batas Minimum:</span>
+                    <span class="font-bold text-slate-200">{{ $stock->min_stock }} {{ $stock->unit }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Product Specifications & Markdown Viewer -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Header Spec Card -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+                <div>
+                    <span class="text-[11px] font-mono uppercase tracking-wider text-indigo-400 font-semibold">Detail Spesifikasi</span>
+                    <h1 class="text-2xl font-bold text-slate-100 mt-1">{{ $stock->name }}</h1>
+                </div>
+
+                <!-- 4 Spec Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                    <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Kode SKU</span>
+                        <span class="text-xs font-mono font-bold text-slate-200 mt-1 block truncate">{{ $stock->sku ?: 'N/A' }}</span>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Satuan</span>
+                        <span class="text-xs font-mono font-bold text-slate-200 mt-1 block uppercase">{{ $stock->unit }}</span>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Harga Satuan</span>
+                        <span class="text-xs font-mono font-bold text-slate-200 mt-1 block truncate">
+                            @if($stock->price !== null)
+                                Rp {{ number_format((float) $stock->price, 0, ',', '.') }}
+                            @else
+                                —
+                            @endif
+                        </span>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Total Nilai Aset</span>
+                        <span class="text-xs font-mono font-bold text-emerald-400 mt-1 block truncate">
+                            Rp {{ number_format(((float) ($stock->price ?? 0)) * $stock->quantity, 0, ',', '.') }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Markdown Description Viewer (Toast UI Viewer) -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                    <h3 class="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Deskripsi & Catatan Teknis (Markdown)</h3>
+                    <span class="text-[10px] font-mono text-slate-500">Toast UI Viewer</span>
+                </div>
+
+                <div x-data="{
+                        markdown: @js($stock->description ?? ''),
+                        initViewer() {
+                            const el = this.$refs.viewerContainer;
+                            if (!el) return;
+                            el.innerHTML = '';
+                            if (!this.markdown) return;
+                            toastui.Editor.factory({
+                                el: el,
+                                viewer: true,
+                                height: 'auto',
+                                theme: 'dark',
+                                initialValue: this.markdown
+                            });
+                        }
+                     }"
+                     x-init="$nextTick(() => initViewer())"
+                     class="min-h-32 text-slate-300 text-sm leading-relaxed">
+                    @if($stock->description)
+                        <div wire:ignore x-ref="viewerContainer" class="toastui-editor-contents"></div>
+                    @else
+                        <div class="py-8 text-center text-slate-500 text-xs italic font-mono">
+                            Belum ada deskripsi spesifikasi markdown untuk barang ini.
+                        </div>
+                    @endif
+                </div>
+
+                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                    <span>Dibuat: {{ $stock->created_at?->format('d M Y, H:i') }}</span>
+                    <span>Diperbarui: {{ $stock->updated_at?->format('d M Y, H:i') }}</span>
+                </div>
             </div>
         </div>
     </div>
-</x-layouts.app>
+
+    <!-- MODAL EDIT INFORMASI BARANG LENGKAP -->
+    @if($showEditModal && !$isReadOnly)
+    <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl text-slate-100"
+             x-data="{
+                description: @entangle('description'),
+                initEditor() {
+                    const el = this.$refs.detailEditorContainer;
+                    if (!el) return;
+                    el.innerHTML = '';
+                    const editor = new toastui.Editor({
+                        el: el,
+                        height: '240px',
+                        initialEditType: 'markdown',
+                        previewStyle: 'vertical',
+                        theme: 'dark',
+                        initialValue: this.description || '',
+                        events: {
+                            change: () => {
+                                this.description = editor.getMarkdown();
+                            }
+                        }
+                    });
+                }
+             }"
+             x-init="$nextTick(() => initEditor())">
+            <div class="flex items-center justify-between p-5 border-b border-slate-800">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm font-bold">
+                        ✏️
+                    </span>
+                    <h3 class="text-base font-bold text-slate-100">Edit Informasi Barang</h3>
+                </div>
+                <button wire:click="$set('showEditModal', false)" class="text-slate-400 hover:text-slate-200 text-xl font-mono leading-none">&times;</button>
+            </div>
+
+            <form wire:submit="save" class="p-6 space-y-4 overflow-y-auto flex-1">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Nama Produk *</label>
+                    <input type="text" wire:model="name"
+                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    @error('name') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">SKU</label>
+                        <input type="text" wire:model="sku"
+                               class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Satuan Unit *</label>
+                        <input type="text" wire:model="unit"
+                               class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                        @error('unit') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Kuantitas Fisik *</label>
+                        <input type="number" wire:model="quantity" min="0"
+                               class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                        @error('quantity') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Batas Min. Stok *</label>
+                        <input type="number" wire:model="minStock" min="0"
+                               class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                        @error('minStock') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Harga Satuan (Rp)</label>
+                        <input type="number" wire:model="price" min="0" step="0.01"
+                               class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">
+                        Deskripsi Spesifikasi (Toast UI Editor - Markdown)
+                    </label>
+                    <div wire:ignore class="rounded-lg overflow-hidden border border-slate-700">
+                        <div x-ref="detailEditorContainer"></div>
+                    </div>
+                    <textarea wire:model="description" class="hidden"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Ganti Foto Cover</label>
+                    <input type="file" wire:model="cover" accept="image/*"
+                           class="block w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                    <button type="button" wire:click="$set('showEditModal', false)"
+                            class="px-4 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition">
+                        Batal
+                    </button>
+                    <button type="submit"
+                            class="px-5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/20 transition">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endif
+</div>

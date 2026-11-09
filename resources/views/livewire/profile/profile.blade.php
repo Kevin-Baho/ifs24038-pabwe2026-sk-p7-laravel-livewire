@@ -1,54 +1,118 @@
-<x-layouts.app>
-    <div class="max-w-2xl mx-auto">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Profil Saya</h1>
-
-        <form wire:submit="save" class="bg-white shadow rounded-lg p-6 space-y-4">
-            @if(session('status'))
-                <div class="p-3 bg-green-50 border border-green-200 rounded text-green-700 text-sm">{{ session('status') }}</div>
-            @endif
-
-            <!-- Avatar -->
-            <div class="flex items-center space-x-4">
-                @if($user->profile_photo_path)
-                    <img src="{{ Storage::url($user->profile_photo_path) }}" class="h-16 w-16 rounded-full object-cover">
-                @else
-                    <div class="h-16 w-16 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold">
-                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                    </div>
-                @endif
-                <div>
-                    <input type="file" wire:model="photo" accept="image/*" class="text-sm text-gray-600">
-                    @error('photo') <p class="text-xs text-red-600">{{ $message }}</p> @enderror
-                </div>
-            </div>
-
-            @foreach(['name' => 'Nama', 'username' => 'Username', 'email' => 'Email'] as $field => $label)
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">{{ $label }}</label>
-                    <input type="text" wire:model="{{ $field }}"
-                           class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
-                    @error($field) <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                </div>
-            @endforeach
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Password Baru (kosongkan jika tidak diubah)</label>
-                <input type="password" wire:model="password"
-                       class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
-                @error('password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
-                <input type="password" wire:model="password_confirmation"
-                       class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">
-            </div>
-
-            <div class="flex justify-end">
-                <button type="submit"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
-                    Simpan Perubahan
-                </button>
-            </div>
-        </form>
+<div class="max-w-2xl mx-auto space-y-6">
+    <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-100">Pengaturan Profil Pengguna</h1>
+            <p class="text-xs text-slate-400 mt-1">Perbarui identitas akun, kredensial keamanan, dan avatar profil.</p>
+        </div>
+        <span class="px-2.5 py-1 rounded-md text-xs font-mono uppercase bg-indigo-950/50 text-indigo-300 border border-indigo-500/30">
+            {{ $user->role }}
+        </span>
     </div>
-</x-layouts.app>
+
+    @if(session('status'))
+        <div class="p-4 rounded-xl bg-emerald-950/60 border border-emerald-800/60 text-emerald-300 text-sm flex items-center gap-2.5 shadow-sm">
+            <span class="text-emerald-400">✓</span>
+            <span>{{ session('status') }}</span>
+        </div>
+    @endif
+
+    <form wire:submit="save" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+        <!-- Avatar & Cropper Section -->
+        <div>
+            <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-3">Foto Profil (Rasio 1:1 &bull; 400x400 PNG)</label>
+            <div class="flex flex-col sm:flex-row items-center gap-6"
+                 x-data="{
+                    cropper: null,
+                    setupCropper(event) {
+                        const file = event.target.files[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const img = this.$refs.cropPreview;
+                            img.src = e.target.result;
+                            img.classList.remove('hidden');
+                            if (this.cropper) {
+                                this.cropper.destroy();
+                            }
+                            this.cropper = new Cropper(img, {
+                                aspectRatio: 1,
+                                viewMode: 1,
+                                autoCropArea: 1,
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                 }">
+                <div class="relative w-24 h-24 rounded-full overflow-hidden ring-2 ring-indigo-500/40 bg-slate-950 flex-shrink-0 shadow-lg">
+                    <img src="{{ $user->profilePhotoUrl() }}" alt="{{ $user->name }}"
+                         class="w-full h-full object-cover">
+                </div>
+
+                <div class="flex-1 w-full space-y-2">
+                    <input type="file" wire:model="photo" accept="image/*" @change="setupCropper($event)"
+                           class="block w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
+                    <p class="text-[11px] text-slate-400 font-mono">
+                        Format didukung: JPG, PNG, WebP (Maks. 2MB). Foto akan dipotong rasio 1:1 tepat di tengah menjadi 400x400 PNG.
+                    </p>
+                    @error('photo') <p class="text-xs text-rose-400">{{ $message }}</p> @enderror
+
+                    <!-- Cropper Preview Area -->
+                    <div class="mt-2 max-w-xs overflow-hidden rounded-lg border border-slate-800 bg-slate-950">
+                        <img x-ref="cropPreview" class="hidden max-h-48 w-full object-contain" alt="Crop Preview">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800/80 grid grid-cols-1 gap-4">
+            <div>
+                <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Nama Lengkap *</label>
+                <input type="text" wire:model="name"
+                       class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                @error('name') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Username *</label>
+                    <input type="text" wire:model="username"
+                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm font-mono text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    @error('username') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Email Akun *</label>
+                    <input type="email" wire:model="email"
+                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    @error('email') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                </div>
+            </div>
+        </div>
+
+        <!-- Security / Password -->
+        <div class="pt-4 border-t border-slate-800/80 space-y-4">
+            <h3 class="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Keamanan & Ubah Password</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Password Baru</label>
+                    <input type="password" wire:model="password" placeholder="Kosongkan jika tidak diubah"
+                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    @error('password') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">Konfirmasi Password Baru</label>
+                    <input type="password" wire:model="password_confirmation" placeholder="Ulangi password baru"
+                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800/80 flex items-center justify-end gap-3">
+            <button type="submit"
+                    class="px-5 py-2.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/20 transition flex items-center gap-2"
+                    wire:loading.attr="disabled">
+                <span wire:loading.remove>Simpan Perubahan</span>
+                <span wire:loading>Menyimpan...</span>
+            </button>
+        </div>
+    </form>
+</div>

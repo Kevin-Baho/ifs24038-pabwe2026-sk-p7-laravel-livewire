@@ -1,55 +1,85 @@
-<x-layouts.app>
-    <div>
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <a href="{{ route('admin.users') }}" class="text-blue-600 hover:text-blue-800 text-sm">← Kembali ke Daftar Pengguna</a>
-                <h1 class="text-2xl font-bold text-gray-800 mt-1">Stok Milik: {{ $targetUser->name }}</h1>
-            </div>
+<div class="space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div>
+            <a href="{{ route('admin.users') }}"
+               class="inline-flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-indigo-400 transition mb-2">
+                <span>&larr;</span>
+                <span>Kembali ke Daftar Pengguna</span>
+            </a>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-100 flex items-center gap-3">
+                <span>Inventaris: {{ $targetUser->name }}</span>
+                <span class="text-xs font-mono font-normal uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                    Mode Read-Only
+                </span>
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">
+                Username: <span class="font-mono text-slate-300">{{ $targetUser->username }}</span> &bull; Email: <span class="font-mono text-slate-300">{{ $targetUser->email }}</span>
+            </p>
         </div>
 
-        <div class="mb-4">
-            <input type="text" wire:model.live="search" placeholder="Cari nama / SKU..."
-                   class="border border-gray-300 rounded-md px-3 py-2 text-sm w-80 focus:border-blue-500 focus:ring-blue-500">
-        </div>
+        <button wire:click="exportExcel"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-emerald-950/60 hover:bg-emerald-900/70 text-emerald-300 border border-emerald-800/60 shadow-sm transition">
+            <span>📥</span>
+            <span>Export Excel Stok Pengguna Ini</span>
+        </button>
+    </div>
 
-        <div class="bg-white shadow rounded-lg overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+    <!-- Search Toolbar -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
+        <div class="relative max-w-md">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 text-sm">🔍</span>
+            <input type="text"
+                   wire:model.live.debounce.300ms="search"
+                   placeholder="Cari nama barang atau SKU milik pengguna..."
+                   class="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-950/80 border-b border-slate-800 text-[11px] font-mono uppercase tracking-wider text-slate-400">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Qty</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Harga</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="py-3.5 px-4 text-center w-12">No</th>
+                        <th class="py-3.5 px-4">Nama Produk</th>
+                        <th class="py-3.5 px-4">SKU</th>
+                        <th class="py-3.5 px-4 text-right">Kuantitas</th>
+                        <th class="py-3.5 px-4">Satuan</th>
+                        <th class="py-3.5 px-4 text-right">Harga Satuan</th>
+                        <th class="py-3.5 px-4 text-center">Status</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="divide-y divide-slate-800/60">
                     @forelse($stocks as $i => $stock)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm text-gray-500">{{ $i + 1 }}</td>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $stock->name }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $stock->sku }}</td>
-                            <td class="px-6 py-4 text-sm text-right text-gray-600">{{ $stock->quantity }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $stock->unit }}</td>
-                            <td class="px-6 py-4 text-sm text-right text-gray-600">
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-500">{{ $i + 1 }}</td>
+                            <td class="py-3.5 px-4 font-medium text-slate-100">{{ $stock->name }}</td>
+                            <td class="py-3.5 px-4 font-mono text-xs text-slate-400">{{ $stock->sku ?: '—' }}</td>
+                            <td class="py-3.5 px-4 text-right font-mono font-bold tabular-nums text-slate-200">{{ $stock->quantity }}</td>
+                            <td class="py-3.5 px-4 text-xs font-mono text-slate-400">{{ $stock->unit }}</td>
+                            <td class="py-3.5 px-4 text-right font-mono tabular-nums text-slate-300">
                                 @if($stock->price !== null)
-                                    Rp {{ number_format((float)$stock->price, 0, ',', '.') }}
-                                @else —
+                                    <span class="text-xs text-slate-500 mr-1">Rp</span>{{ number_format((float) $stock->price, 0, ',', '.') }}
+                                @else
+                                    —
                                 @endif
                             </td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 py-1 text-xs rounded-full {{ $stock->status->badgeClass() }}">
+                            <td class="py-3.5 px-4 text-center">
+                                <span class="inline-block px-2.5 py-0.5 text-xs font-medium rounded-full {{ $stock->status->badgeClass() }}">
                                     {{ $stock->status->label() }}
                                 </span>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada stok.</td></tr>
+                        <tr>
+                            <td colspan="7" class="py-8 text-center text-xs text-slate-500 font-mono">
+                                Pengguna ini belum memiliki data stok barang.
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-</x-layouts.app>
+</div>

@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Features\Ai\Contracts\AiClientInterface;
+use App\Features\Ai\Services\OpenAiStockGeneratorService;
 use App\Features\Stock\Contracts\StockRepositoryInterface;
 use App\Features\Stock\Models\Stock;
 use App\Features\Stock\Policies\StockPolicy;
 use App\Features\Stock\Repositories\StockRepository;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(StockRepositoryInterface::class, StockRepository::class);
+        $this->app->bind(AiClientInterface::class, function () {
+            return new OpenAiStockGeneratorService();
+        });
     }
 
     public function boot(): void
@@ -35,6 +42,19 @@ class AppServiceProvider extends ServiceProvider
 
         // Register policies
         Gate::policy(Stock::class, StockPolicy::class);
+
+        // Rate limiters: 1000 request/sec
+        RateLimiter::for('1000-per-second', function (Request $request) {
+            return Limit::perSecond(1000)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('global', function (Request $request) {
+            return Limit::perSecond(1000)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perSecond(1000)->by($request->user()?->id ?: $request->ip());
+        });
 
         // Register layout hint path
         View::addNamespace('layouts', resource_path('views/components/layouts'));

@@ -34,10 +34,13 @@ Route::post('/logout', function () {
     return redirect()->route('login');
 })->name('logout')->middleware('auth');
 
+Route::middleware(['auth', 'throttle:1000,1'])->group(function (): void {
+    Route::get('/profile', Profile::class)->name('profile');
+    Route::get('/stocks/{stock}', StockDetail::class)->name('stocks.detail')->middleware('owns.stock');
+});
+
 Route::middleware(['auth', 'role:member', 'throttle:1000,1'])->group(function (): void {
     Route::get('/stocks', StockList::class)->name('stocks.index');
-    Route::get('/stocks/{stock}', StockDetail::class)->name('stocks.detail')->middleware('owns.stock');
-    Route::get('/profile', Profile::class)->name('profile');
 });
 
 Route::middleware(['auth', 'role:admin', 'throttle:1000,1'])->group(function (): void {

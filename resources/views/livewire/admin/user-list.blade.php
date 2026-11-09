@@ -1,54 +1,84 @@
-<x-layouts.app>
-    <div>
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Manajemen Pengguna</h1>
-
-        <div class="mb-4">
-            <input type="text" wire:model.live="search" placeholder="Cari nama / username..."
-                   class="border border-gray-300 rounded-md px-3 py-2 text-sm w-80 focus:border-blue-500 focus:ring-blue-500">
+<div class="space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-100">Manajemen Pengguna & Inventaris</h1>
+            <p class="text-xs text-slate-400 mt-1">Daftar seluruh pengguna terdaftar beserta ringkasan macam stok inventaris masing-masing.</p>
         </div>
+        <span class="px-3 py-1 rounded-lg text-xs font-mono uppercase bg-indigo-950/50 text-indigo-300 border border-indigo-500/30">
+            Admin Workspace
+        </span>
+    </div>
 
-        <div class="bg-white shadow rounded-lg overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+    <!-- Filter / Search -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
+        <div class="relative max-w-md">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 text-sm">🔍</span>
+            <input type="text"
+                   wire:model.live.debounce.300ms="search"
+                   placeholder="Cari berdasarkan nama atau username..."
+                   class="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-950/80 border-b border-slate-800 text-[11px] font-mono uppercase tracking-wider text-slate-400">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Username</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total Stok</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total Aset</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                        <th class="py-3.5 px-4 text-center w-12">No</th>
+                        <th class="py-3.5 px-4">Pengguna</th>
+                        <th class="py-3.5 px-4">Email</th>
+                        <th class="py-3.5 px-4 text-center">Role</th>
+                        <th class="py-3.5 px-4 text-right">Total Macam Stok</th>
+                        <th class="py-3.5 px-4 text-right">Estimasi Aset</th>
+                        <th class="py-3.5 px-4 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="divide-y divide-slate-800/60">
                     @forelse($users as $i => $user)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm text-gray-500">{{ $i + 1 }}</td>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $user->name }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $user->username }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $user->email }}</td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 py-1 text-xs rounded-full {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-500">{{ $i + 1 }}</td>
+                            <td class="py-3.5 px-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="{{ $user->profilePhotoUrl() }}" alt="{{ $user->name }}"
+                                         class="w-8 h-8 rounded-full object-cover ring-1 ring-slate-800 flex-shrink-0">
+                                    <div>
+                                        <div class="font-medium text-slate-100">{{ $user->name }}</div>
+                                        <div class="text-[11px] font-mono text-slate-500">@<span>{{ $user->username }}</span></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-4 text-xs font-mono text-slate-400">{{ $user->email }}</td>
+                            <td class="py-3.5 px-4 text-center">
+                                <span class="px-2.5 py-0.5 text-xs font-mono uppercase rounded-md border {{ $user->role === 'admin' ? 'bg-purple-950/60 text-purple-300 border-purple-800/60' : 'bg-slate-800 text-slate-300 border-slate-700' }}">
                                     {{ $user->role }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-sm text-right text-gray-600">{{ $user->stocks_count ?? 0 }}</td>
-                            <td class="px-6 py-4 text-sm text-right text-gray-600">
-                                Rp {{ number_format($user->stocks_sum_price ?? 0, 0, ',', '.') }}
+                            <td class="py-3.5 px-4 text-right font-mono tabular-nums text-slate-200">
+                                <span class="font-bold">{{ $user->stocks_count ?? 0 }}</span>
+                                <span class="text-xs text-slate-500 ml-1">macam</span>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="py-3.5 px-4 text-right font-mono tabular-nums text-slate-300">
+                                <span class="text-xs text-slate-500 mr-1">Rp</span>{{ number_format((float) ($user->stocks_sum_price ?? 0), 0, ',', '.') }}
+                            </td>
+                            <td class="py-3.5 px-4 text-right">
                                 <a href="{{ route('admin.users.stocks', $user->id) }}"
-                                   class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                    Lihat Stok
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition shadow-sm">
+                                    <span>Lihat Stok</span>
+                                    <span>&rarr;</span>
                                 </a>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada pengguna.</td></tr>
+                        <tr>
+                            <td colspan="7" class="py-8 text-center text-xs text-slate-500 font-mono">
+                                Tidak ada pengguna yang cocok dengan kriteria pencarian.
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-</x-layouts.app>
+</div>

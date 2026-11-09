@@ -10,6 +10,7 @@ use App\Features\Stock\Models\Stock;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class StockService
 {
@@ -52,6 +53,9 @@ class StockService
     public function update(Stock $stock, array $data, ?UploadedFile $cover = null): Stock
     {
         if ($cover !== null) {
+            if ($stock->cover_image_path) {
+                Storage::disk('public')->delete($stock->cover_image_path);
+            }
             $data['cover_image_path'] = $cover->store('covers', 'public');
         }
 
@@ -60,17 +64,26 @@ class StockService
 
     public function delete(Stock $stock): void
     {
+        if ($stock->cover_image_path) {
+            Storage::disk('public')->delete($stock->cover_image_path);
+        }
+
         $this->repository->delete($stock);
+    }
+
+    public function adjustQuantity(Stock $stock, int $delta): Stock
+    {
+        return $this->repository->adjustQuantity($stock, $delta);
     }
 
     public function increment(Stock $stock): Stock
     {
-        return $this->repository->adjustQuantity($stock, 1);
+        return $this->adjustQuantity($stock, 1);
     }
 
     public function decrement(Stock $stock): Stock
     {
-        return $this->repository->adjustQuantity($stock, -1);
+        return $this->adjustQuantity($stock, -1);
     }
 
     public function allForAdmin(int $userId): Collection

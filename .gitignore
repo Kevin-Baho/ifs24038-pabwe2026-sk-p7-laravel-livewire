@@ -25,3 +25,12 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# CI/CD artifacts & security scans
+coverage/
+coverage.xml
+coverage.clover
+clover.xml
+*.sarif
+trivy-results.sarif
+latest-app.zip

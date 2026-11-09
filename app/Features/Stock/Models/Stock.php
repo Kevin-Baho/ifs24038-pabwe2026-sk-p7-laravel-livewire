@@ -10,6 +10,7 @@ use Database\Factories\StockFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Stock extends Model
 {
@@ -51,8 +52,19 @@ class Stock extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function coverImageUrl(): ?string
+    {
+        if ($this->cover_image_path && Storage::disk('public')->exists($this->cover_image_path)) {
+            return Storage::disk('public')->url($this->cover_image_path);
+        }
+
+        return null;
+    }
+
     public function syncStatus(): void
     {
-        $this->status = StockStatus::fromQuantity($this->quantity, $this->min_stock);
+        $quantity = (int) ($this->quantity ?? 0);
+        $minStock = (int) ($this->min_stock ?? 5);
+        $this->status = StockStatus::determine($quantity, $minStock);
     }
 }

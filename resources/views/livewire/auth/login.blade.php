@@ -1,68 +1,99 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-        <div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                📦 Stock Inventory
+<div class="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-6">
+        <div class="text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-2xl mb-3 shadow-lg shadow-indigo-500/10">
+                ⚡
+            </div>
+            <h2 class="text-2xl font-bold tracking-tight text-slate-100">
+                Masuk ke Stock<span class="text-indigo-400">Pro</span>
             </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">Masuk ke akun Anda</p>
+            <p class="mt-1 text-sm text-slate-400">
+                Kelola stok dan inventaris barang dengan efisiensi tinggi
+            </p>
         </div>
-        <form wire:submit="login" class="mt-8 space-y-6 bg-white py-8 px-6 shadow rounded-lg">
-            @if($errors->any())
-                <div class="p-3 rounded-md bg-red-50 border border-red-200">
-                    @foreach($errors->all() as $error)
-                        <p class="text-sm text-red-600">{{ $error }}</p>
-                    @endforeach
-                </div>
-            @endif
 
-            <div class="space-y-4">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl backdrop-blur-sm">
+            <form wire:submit="login" class="space-y-5">
+                @if($errors->any())
+                    <div class="p-3.5 rounded-lg bg-rose-950/60 border border-rose-800/60 text-rose-300 text-sm space-y-1">
+                        @foreach($errors->all() as $error)
+                            <p class="flex items-center gap-2">
+                                <span class="text-rose-400 text-xs">●</span>
+                                <span>{{ $error }}</span>
+                            </p>
+                        @endforeach
+                    </div>
+                @endif
+
                 <div>
-                    <label for="login-username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <label for="login-username" class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">
+                        Username atau Email
+                    </label>
                     <input
                         id="login-username"
                         type="text"
                         wire:model="username"
                         autocomplete="username"
                         placeholder="admin atau member"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
+                        class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     >
-                    @error('username') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    @error('username') <p class="mt-1.5 text-xs text-rose-400">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label for="login-password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label for="login-password" class="block text-xs font-medium text-slate-300 uppercase tracking-wider">
+                            Password
+                        </label>
+                    </div>
                     <input
                         id="login-password"
                         type="password"
                         wire:model="password"
                         autocomplete="current-password"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
+                        placeholder="••••••••"
+                        class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     >
-                    @error('password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    @error('password') <p class="mt-1.5 text-xs text-rose-400">{{ $message }}</p> @enderror
                 </div>
 
-                <div class="flex items-center">
-                    <input id="remember" wire:model="remember" type="checkbox"
-                           class="h-4 w-4 text-blue-600 border-gray-300 rounded">
-                    <label for="remember" class="ml-2 block text-sm text-gray-900">Ingat saya</label>
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-400 select-none">
+                        <input id="remember" wire:model="remember" type="checkbox"
+                               class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900">
+                        <span>Ingat sesi saya</span>
+                    </label>
                 </div>
-            </div>
 
-            <div>
-                <button
-                    id="login-submit"
-                    type="submit"
-                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    wire:loading.attr="disabled"
-                >
-                    <span wire:loading.remove>Masuk</span>
-                    <span wire:loading>Memproses...</span>
-                </button>
-            </div>
+                <div>
+                    <button
+                        id="login-submit"
+                        type="submit"
+                        class="w-full py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-md shadow-indigo-600/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition flex items-center justify-center gap-2"
+                        wire:loading.attr="disabled"
+                    >
+                        <span wire:loading.remove>Masuk ke Akun</span>
+                        <span wire:loading class="flex items-center gap-2">
+                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Memverifikasi...
+                        </span>
+                    </button>
+                </div>
 
-            <p class="text-center text-xs text-gray-500 mt-4">
-                Demo: <strong>admin</strong>/admin &nbsp;|&nbsp; <strong>member</strong>/member
-            </p>
-        </form>
+                <div class="pt-2 border-t border-slate-800/80 text-center text-xs text-slate-400">
+                    Belum punya akun?
+                    <a href="{{ route('register') }}" class="text-indigo-400 hover:text-indigo-300 font-medium ml-1">
+                        Daftar sebagai Member
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="text-center font-mono text-[11px] text-slate-500">
+            Kredensial Bawaan: <span class="text-slate-400">admin / admin</span> &nbsp;•&nbsp; <span class="text-slate-400">member / member</span>
+        </div>
     </div>
 </div>

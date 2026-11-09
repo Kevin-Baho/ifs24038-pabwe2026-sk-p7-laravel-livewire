@@ -30,7 +30,7 @@ class StockFactory extends Factory
             'unit'             => fake()->randomElement(['pcs', 'kg', 'liter', 'box', 'pack']),
             'price'            => fake()->randomFloat(2, 1000, 5000000),
             'min_stock'        => $minStock,
-            'status'           => StockStatus::fromQuantity($quantity, $minStock)->value,
+            'status'           => StockStatus::determine($quantity, $minStock)->value,
             'cover_image_path' => null,
         ];
     }
@@ -40,7 +40,7 @@ class StockFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'quantity'  => 100,
             'min_stock' => 5,
-            'status'    => StockStatus::Available->value,
+            'status'    => StockStatus::AVAILABLE->value,
         ]);
     }
 
@@ -49,7 +49,7 @@ class StockFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'quantity'  => 3,
             'min_stock' => 5,
-            'status'    => StockStatus::LowStock->value,
+            'status'    => StockStatus::LOW_STOCK->value,
         ]);
     }
 
@@ -58,7 +58,7 @@ class StockFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'quantity'  => 0,
             'min_stock' => 5,
-            'status'    => StockStatus::OutOfStock->value,
+            'status'    => StockStatus::OUT_OF_STOCK->value,
         ]);
     }
 }

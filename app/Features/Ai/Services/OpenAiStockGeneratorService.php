@@ -8,11 +8,20 @@ use App\Features\Ai\Contracts\AiClientInterface;
 use App\Features\Ai\DTO\GeneratedStockItem;
 use RuntimeException;
 
-class OpenAiStockGeneratorService
+class OpenAiStockGeneratorService implements AiClientInterface
 {
     public function __construct(
-        private readonly AiClientInterface $client,
+        private readonly ?AiClientInterface $client = null,
     ) {}
+
+    public function complete(string $prompt, int $maxTokens = 2048): string
+    {
+        if ($this->client !== null) {
+            return $this->client->complete($prompt, $maxTokens);
+        }
+
+        return '';
+    }
 
     /**
      * Generate stock items for the given theme/category.
@@ -22,7 +31,7 @@ class OpenAiStockGeneratorService
     public function generate(string $theme, int $count = 5): array
     {
         $prompt = $this->buildPrompt($theme, $count);
-        $raw    = $this->client->complete($prompt);
+        $raw    = $this->complete($prompt);
 
         return $this->parseResponse($raw);
     }
