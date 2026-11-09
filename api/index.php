@@ -5,7 +5,11 @@ ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
 try {
-    // 1. Folder compiled views di /tmp (wajib di Vercel karena read-only)
+    // 1. Alihkan Log ke stderr agar tidak menulis ke file log yang read-only
+    putenv("LOG_CHANNEL=stderr");
+    $_ENV['LOG_CHANNEL'] = 'stderr';
+
+    // 2. Folder compiled views di /tmp
     $viewPath = '/tmp/views';
     if (!is_dir($viewPath)) {
         mkdir($viewPath, 0755, true);
@@ -13,7 +17,7 @@ try {
     putenv("VIEW_COMPILED_PATH={$viewPath}");
     $_ENV['VIEW_COMPILED_PATH'] = $viewPath;
 
-    // 2. Setup SQLite di /tmp
+    // 3. Setup SQLite di /tmp
     $dbFile = '/tmp/database.sqlite';
     $needMigration = !file_exists($dbFile) || filesize($dbFile) === 0;
     if (!file_exists($dbFile)) {
@@ -34,7 +38,7 @@ try {
     /** @var \Illuminate\Foundation\Application $app */
     $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-    // 3. Jalankan migrasi jika database masih kosong
+    // 4. Jalankan migrasi & seeding otomatis pada database baru
     if ($needMigration) {
         try {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);

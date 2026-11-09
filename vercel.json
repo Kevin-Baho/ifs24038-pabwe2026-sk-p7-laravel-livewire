@@ -3,7 +3,9 @@
   "outputDirectory": "public",
   "framework": null,
   "functions": {
-    "api/index.php": { "runtime": "vercel-php@0.7.4" }
+    "api/index.php": {
+      "runtime": "vercel-php@0.7.4"
+    }
   },
   "routes": [
     {
@@ -22,6 +24,7 @@
   "env": {
     "APP_ENV": "production",
     "APP_DEBUG": "true",
+    "LOG_CHANNEL": "stderr",
     "VIEW_COMPILED_PATH": "/tmp/views",
     "CACHE_STORE": "array",
     "SESSION_DRIVER": "cookie",
