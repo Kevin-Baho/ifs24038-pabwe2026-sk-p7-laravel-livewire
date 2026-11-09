@@ -71,7 +71,16 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": ["laravel/boost"]
+            "dont-discover": [
+                "laravel/boost",
+                "laravel/mcp",
+                "laravel/pail",
+                "laravel/pao",
+                "laravel/roster",
+                "laravel/tinker",
+                "nunomaduro/collision",
+                "nunomaduro/termwind"
+            ]
         }
     },
     "config": {
