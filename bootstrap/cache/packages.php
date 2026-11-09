@@ -1,11 +1,4 @@
 <?php return array (
-  'laravel/boost' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Boost\\BoostServiceProvider',
-    ),
-  ),
   'laravel/mcp' => 
   array (
     'aliases' => 
