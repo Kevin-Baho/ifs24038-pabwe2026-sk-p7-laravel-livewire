@@ -22,7 +22,7 @@
   "env": {
     "APP_ENV": "production",
     "APP_DEBUG": "true",
-    "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
+    "VIEW_COMPILED_PATH": "/tmp/views",
     "CACHE_STORE": "array",
     "SESSION_DRIVER": "cookie",
     "DB_CONNECTION": "sqlite",
