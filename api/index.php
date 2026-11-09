@@ -7,20 +7,33 @@ error_reporting(E_ALL);
 try {
     // 1. Alihkan Log ke stderr agar tidak menulis ke file log yang read-only
     putenv('LOG_CHANNEL=stderr');
-    $_ENV['LOG_CHANNEL'] = 'stderr';
+    $_ENV['LOG_CHANNEL']    = 'stderr';
     $_SERVER['LOG_CHANNEL'] = 'stderr';
 
-    // 2. Folder compiled views di /tmp
+    // 2. Folder compiled views di /tmp (satu-satunya direktori writable di Vercel)
     $viewPath = '/tmp/views';
     if (!is_dir($viewPath)) {
         mkdir($viewPath, 0755, true);
     }
     putenv("VIEW_COMPILED_PATH={$viewPath}");
-    $_ENV['VIEW_COMPILED_PATH'] = $viewPath;
+    $_ENV['VIEW_COMPILED_PATH']    = $viewPath;
     $_SERVER['VIEW_COMPILED_PATH'] = $viewPath;
 
-    // 3. Setup SQLite di /tmp
-    $dbFile = '/tmp/database.sqlite';
+    // 3. Bootstrap cache di /tmp (bootstrap/cache read-only di Vercel)
+    $bootstrapCache = '/tmp/bootstrap/cache';
+    if (!is_dir($bootstrapCache)) {
+        mkdir($bootstrapCache, 0755, true);
+    }
+
+    // Salin packages.php yang sudah di-commit ke /tmp agar package discovery tidak ditulis ulang
+    $srcPackages = __DIR__ . '/../bootstrap/cache/packages.php';
+    $dstPackages = $bootstrapCache . '/packages.php';
+    if (file_exists($srcPackages) && !file_exists($dstPackages)) {
+        copy($srcPackages, $dstPackages);
+    }
+
+    // 4. Setup SQLite di /tmp
+    $dbFile        = '/tmp/database.sqlite';
     $needMigration = !file_exists($dbFile) || filesize($dbFile) === 0;
     if (!file_exists($dbFile)) {
         touch($dbFile);
@@ -45,26 +58,28 @@ try {
     /** @var \Illuminate\Foundation\Application $app */
     $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-    // 4. Boot the HTTP kernel so all service providers (including ViewServiceProvider)
-    //    are registered before anything else runs.
+    // 5. Redirect bootstrap path ke /tmp sehingga services.php & packages.php
+    //    ditulis ke /tmp/bootstrap/cache (writable) bukan bootstrap/cache (read-only)
+    $app->useBootstrapPath('/tmp/bootstrap');
+
+    // 6. Boot kernel — semua service provider terdaftar di sini
     $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
 
     $request = \Illuminate\Http\Request::capture();
 
-    // Bootstrap the kernel (registers all service providers, bindings, etc.)
     $kernel->bootstrap();
 
-    // 5. Jalankan migrasi & seeding otomatis pada database baru SETELAH bootstrap
+    // 7. Jalankan migrasi & seeding otomatis pada database baru
     if ($needMigration) {
         try {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+            \Illuminate\Support\Facades\Artisan::call('db:seed',  ['--force' => true]);
         } catch (\Throwable $mErr) {
             // Abaikan jika sudah termigrasi
         }
     }
 
-    // 6. Handle the request through the fully-booted kernel
+    // 8. Handle request
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
@@ -73,8 +88,8 @@ try {
     http_response_code(500);
     echo "<div style='font-family: sans-serif; padding: 2rem; background: #0f172a; color: #f87171;'>";
     echo "<h2 style='color: #ef4444;'>Detail Error di Vercel:</h2>";
-    echo "<p><strong>Pesan:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
-    echo "<p><strong>File:</strong> " . htmlspecialchars($e->getFile()) . " (Baris: " . $e->getLine() . ")</p>";
+    echo "<p><strong>Pesan:</strong> "  . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p><strong>File:</strong> "   . htmlspecialchars($e->getFile()) . " (Baris: " . $e->getLine() . ")</p>";
     echo "<pre style='background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; overflow-x: auto;'>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
     echo "</div>";
 }
