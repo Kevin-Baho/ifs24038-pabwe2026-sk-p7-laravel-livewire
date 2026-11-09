@@ -31,13 +31,16 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Force HTTPS in production or when FORCE_HTTPS=true
-        if (
-            app()->environment('production')
-            || config('app.force_https', false)
-            || env('FORCE_HTTPS', false) === true
-            || env('FORCE_HTTPS') === 'true'
-        ) {
-            URL::forceScheme('https');
+        // Wrapped in try/catch so it never crashes when UrlGenerator is not yet ready
+        try {
+            if (
+                config('app.force_https', false)
+                || $this->app->environment('production')
+            ) {
+                URL::forceScheme('https');
+            }
+        } catch (\Throwable) {
+            // UrlGenerator may not be bound yet during early bootstrap; safe to skip
         }
 
         // Register policies

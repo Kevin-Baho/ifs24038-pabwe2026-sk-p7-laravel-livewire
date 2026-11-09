@@ -25,7 +25,7 @@ try {
         mkdir($bootstrapCache, 0755, true);
     }
 
-    // Salin packages.php yang sudah di-commit ke /tmp agar package discovery tidak ditulis ulang
+    // Salin packages.php yang sudah di-commit ke /tmp agar package discovery tidak perlu ditulis ulang
     $srcPackages = __DIR__ . '/../bootstrap/cache/packages.php';
     $dstPackages = $bootstrapCache . '/packages.php';
     if (file_exists($srcPackages) && !file_exists($dstPackages)) {
@@ -62,14 +62,16 @@ try {
     //    ditulis ke /tmp/bootstrap/cache (writable) bukan bootstrap/cache (read-only)
     $app->useBootstrapPath('/tmp/bootstrap');
 
-    // 6. Boot kernel — semua service provider terdaftar di sini
-    $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
-
+    // 6. Tangkap request dan daftarkan ke container SEBELUM kernel/bootstrap apapun,
+    //    supaya UrlGenerator mendapat instance Request yang valid saat boot.
     $request = \Illuminate\Http\Request::capture();
+    $app->instance('request', $request);
 
+    // 7. Boot kernel — semua service provider terdaftar di sini
+    $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
     $kernel->bootstrap();
 
-    // 7. Jalankan migrasi & seeding otomatis pada database baru
+    // 8. Jalankan migrasi & seeding otomatis pada database baru
     if ($needMigration) {
         try {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
@@ -79,7 +81,7 @@ try {
         }
     }
 
-    // 8. Handle request
+    // 9. Handle request & kirim response
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
