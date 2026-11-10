@@ -1,4 +1,7 @@
 # StockPro — Sistem Manajemen Stok & Inventaris Barang
+> **Repository:** `ifs24038-pabwe2026-sk-p7-laravel-livewire`  
+> **Username / Identitas:** `ifs24038`  
+> **Mata Kuliah:** Pengembangan Aplikasi Berbasis Web (PABWE) 2026 — Studi Kasus P7
 
 Sistem manajemen inventaris berbasis web modern yang dibangun dengan arsitektur **Feature-First**, mengadopsi tema gelap elegan (**Sleek Linear/Vercel Dark Theme**), ditenagai oleh **Laravel 13**, **Livewire 4**, **MySQL**, **PhpSpreadsheet**, **OpenAI**, dan **Tailwind CSS**.
 

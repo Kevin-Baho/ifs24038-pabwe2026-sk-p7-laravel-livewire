@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "ifs24038/ifs24038-pabwe2026-sk-p7-laravel-livewire",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Studi Kasus: Sistem Manajemen Stok & Inventaris Barang (StockPro) - ifs24038",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
