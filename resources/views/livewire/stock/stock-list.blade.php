@@ -91,31 +91,27 @@
                 </select>
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Action Buttons (Tanpa aria-label yang konflik dengan teks di dalam tombol) -->
             <div class="flex flex-wrap items-center gap-2">
                 <button wire:click="openAiModal"
-                        aria-label="Buka AI Generator Stok"
                         class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-purple-950/70 hover:bg-purple-900/80 text-purple-200 border border-purple-700 transition shadow-sm">
                     <span>✨</span>
                     <span>AI Generator</span>
                 </button>
 
                 <button wire:click="openImportModal"
-                        aria-label="Import data dari spreadsheet Excel"
                         class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-950/70 hover:bg-amber-900/80 text-amber-200 border border-amber-700 transition shadow-sm">
                     <span>📂</span>
                     <span>Import Excel</span>
                 </button>
 
                 <button wire:click="exportExcel"
-                        aria-label="Export data ke file spreadsheet Excel"
                         class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-950/70 hover:bg-emerald-900/80 text-emerald-200 border border-emerald-700 transition shadow-sm">
                     <span>📥</span>
                     <span>Export Excel</span>
                 </button>
 
                 <button wire:click="openCreateModal"
-                        aria-label="Tambah stok barang baru"
                         class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 transition">
                     <span>+</span>
                     <span>Tambah Stok</span>
@@ -526,7 +522,7 @@
                     <h2 id="delete-modal-title" class="text-base font-bold text-slate-100">Konfirmasi Hapus Barang</h2>
                     <p id="delete-modal-desc" class="mt-2 text-xs text-slate-200 leading-relaxed">
                         Apakah Anda yakin ingin menghapus barang <strong class="text-white font-bold">"{{ $deletingStockName }}"</strong>? Tindakan ini bersifat permanen dan tidak dapat dibatalkan.
-                    </p>
+                        </p>
                 </div>
             </div>
 
