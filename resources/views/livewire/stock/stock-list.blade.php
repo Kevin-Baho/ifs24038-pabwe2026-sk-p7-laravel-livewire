@@ -75,7 +75,7 @@
                 <label for="statusFilter" class="sr-only">Filter Status Stok</label>
                 <select id="statusFilter"
                         wire:model.live="statusFilter"
-                        aria-label="Filter status stok"
+                        aria-label="Filter status stok barang"
                         class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     <option value="">Semua Status</option>
                     @foreach($statusOptions as $s)
@@ -86,7 +86,7 @@
                 <label for="perPage" class="sr-only">Jumlah item per halaman</label>
                 <select id="perPage"
                         wire:model.live="perPage"
-                        aria-label="Jumlah item per halaman"
+                        aria-label="Jumlah barang per halaman"
                         class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     <option value="10">10 / halaman</option>
                     <option value="25">25 / halaman</option>
@@ -341,8 +341,8 @@
                 </div>
 
                 <div>
-                    <label for="stock-form-cover" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Foto Cover Barang</label>
-                    <input id="stock-form-cover" type="file" wire:model="cover" accept="image/*" aria-label="Foto cover barang"
+                    <label for="cover" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Foto Cover Barang</label>
+                    <input id="cover" type="file" wire:model="cover" accept="image/*" aria-label="Upload gambar cover produk"
                            class="block w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
                     @error('cover') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
                 </div>

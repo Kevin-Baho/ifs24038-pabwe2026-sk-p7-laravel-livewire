@@ -56,11 +56,11 @@
 
                 @if(!$isReadOnly)
                     <div class="pt-2 border-t border-slate-800/80">
-                        <label for="detail-cover-input" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-2">
+                        <label for="cover" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-2">
                             {{ $stock->cover_image_path ? 'Ganti Cover Barang' : 'Unggah Cover Barang' }}
                         </label>
                         <div class="flex items-center gap-2">
-                            <input id="detail-cover-input" type="file" wire:model="cover" accept="image/*" aria-label="Unggah cover barang"
+                            <input id="cover" type="file" wire:model="cover" accept="image/*" aria-label="Upload gambar cover produk"
                                    class="text-xs text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer w-full">
                         </div>
                         @if($cover)

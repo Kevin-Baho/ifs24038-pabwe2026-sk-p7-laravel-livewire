@@ -14,7 +14,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Toast UI Editor & Viewer (Deferred) -->
+    <!-- Toast UI Editor & Viewer (Deferred for non-blocking render) -->
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js" defer></script>

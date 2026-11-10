@@ -4,9 +4,7 @@
             <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-2xl mb-3 shadow-lg shadow-indigo-500/10">
                 ⚡
             </div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-100">
-                Masuk ke Stock<span class="text-indigo-400">Pro</span>
-            </h1>
+            <h1 class="text-2xl font-bold text-slate-100">Masuk ke Akun Anda</h1>
             <p class="mt-1 text-sm text-slate-300">
                 Kelola stok dan inventaris barang dengan efisiensi tinggi
             </p>

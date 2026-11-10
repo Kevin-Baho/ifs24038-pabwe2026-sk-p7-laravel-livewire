@@ -19,7 +19,7 @@
     <form wire:submit="save" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
         <!-- Avatar & Cropper Section -->
         <div>
-            <label for="profile-photo" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-3">Foto Profil (Rasio 1:1 &bull; 400x400 PNG)</label>
+            <label for="photo" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-3">Foto Profil (Rasio 1:1 &bull; 400x400 PNG)</label>
             <div class="flex flex-col sm:flex-row items-center gap-6"
                  x-data="{
                     cropper: null,
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="flex-1 w-full space-y-2">
-                    <input id="profile-photo" type="file" wire:model="photo" accept="image/*" @change="setupCropper($event)" aria-label="Upload foto profil"
+                    <input id="photo" type="file" wire:model="photo" accept="image/*" @change="setupCropper($event)" aria-label="Upload foto profil"
                            class="block w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
                     <p class="text-[11px] text-slate-300 font-mono">
                         Format didukung: JPG, PNG, WebP (Maks. 2MB). Foto akan dipotong rasio 1:1 tepat di tengah menjadi 400x400 PNG.
@@ -67,7 +67,7 @@
         <div class="pt-4 border-t border-slate-800/80 grid grid-cols-1 gap-4">
             <div>
                 <label for="profile-name" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Nama Lengkap *</label>
-                <input id="profile-name" type="text" wire:model="name"
+                <input id="profile-name" type="text" wire:model="name" aria-label="Nama Lengkap"
                        class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                 @error('name') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
             </div>
@@ -75,13 +75,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="profile-username" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Username *</label>
-                    <input id="profile-username" type="text" wire:model="username"
+                    <input id="profile-username" type="text" wire:model="username" aria-label="Username"
                            class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm font-mono text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     @error('username') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label for="profile-email" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Email Akun *</label>
-                    <input id="profile-email" type="email" wire:model="email"
+                    <input id="profile-email" type="email" wire:model="email" aria-label="Alamat Email"
                            class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     @error('email') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
                 </div>
@@ -94,13 +94,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="profile-password" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Password Baru</label>
-                    <input id="profile-password" type="password" wire:model="password" placeholder="Kosongkan jika tidak diubah"
+                    <input id="profile-password" type="password" wire:model="password" placeholder="Kosongkan jika tidak diubah" aria-label="Password Baru"
                            class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     @error('password') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label for="profile-password-confirmation" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Konfirmasi Password Baru</label>
-                    <input id="profile-password-confirmation" type="password" wire:model="password_confirmation" placeholder="Ulangi password baru"
+                    <input id="profile-password-confirmation" type="password" wire:model="password_confirmation" placeholder="Ulangi password baru" aria-label="Konfirmasi Password Baru"
                            class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                 </div>
             </div>
