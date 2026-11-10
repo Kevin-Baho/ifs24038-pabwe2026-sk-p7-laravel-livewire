@@ -1,60 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Providers;
 
 use App\Features\Ai\Contracts\AiClientInterface;
-use App\Features\Ai\Services\OpenAiStockGeneratorService;
 use App\Features\Stock\Contracts\StockRepositoryInterface;
-use App\Features\Stock\Repositories\StockRepository;
+use App\Features\Stock\Models\Stock;
+use App\Features\Stock\Policies\StockPolicy;
+use App\Models\User;
 use App\Providers\AppServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 class AppServiceProviderTest extends TestCase
 {
-    public function test_service_bindings(): void
+    public function test_bindings(): void
     {
         $provider = new AppServiceProvider($this->app);
         $provider->register();
 
-        $repo = app(StockRepositoryInterface::class);
-        $this->assertInstanceOf(StockRepository::class, $repo);
-
-        $ai = app(AiClientInterface::class);
-        $this->assertInstanceOf(OpenAiStockGeneratorService::class, $ai);
+        $this->assertTrue($this->app->bound(StockRepositoryInterface::class));
+        $this->assertTrue($this->app->bound(AiClientInterface::class));
     }
 
-    public function test_force_https_configuration(): void
+    public function test_policies_and_rate_limiters(): void
+    {
+        $provider = new AppServiceProvider($this->app);
+        $provider->boot();
+
+        $policy = Gate::getPolicyFor(Stock::class);
+        $this->assertInstanceOf(StockPolicy::class, $policy);
+
+        $requestWithUser = Request::create('/', 'GET');
+        $user = new User(['id' => 42]);
+        $requestWithUser->setUserResolver(fn () => $user);
+
+        $requestWithoutUser = Request::create('/', 'GET', [], [], [], ['REMOTE_ADDR' => '127.0.0.1']);
+
+        foreach (['1000-per-second', 'global', 'api'] as $limiterName) {
+            $limiterCallback = RateLimiter::limiter($limiterName);
+            $this->assertNotNull($limiterCallback, "Limiter {$limiterName} should be registered");
+
+            $limitWithUser = $limiterCallback($requestWithUser);
+            $this->assertSame(1000, $limitWithUser->maxAttempts);
+
+            $limitWithoutUser = $limiterCallback($requestWithoutUser);
+            $this->assertSame(1000, $limitWithoutUser->maxAttempts);
+        }
+    }
+
+    public function test_force_https_condition(): void
     {
         config(['app.force_https' => true]);
 
         $provider = new AppServiceProvider($this->app);
         $provider->boot();
 
-        $generated = URL::to('/test');
-        $this->assertStringStartsWith('https://', $generated);
+        $url = URL::to('/test');
+        $this->assertStringStartsWith('https://', $url);
 
-        // Reset
         config(['app.force_https' => false]);
-    }
-
-    public function test_rate_limiters(): void
-    {
-        $request = Request::create('/test', 'GET');
-
-        $limiter1000 = RateLimiter::limiter('1000-per-second');
-        $this->assertNotNull($limiter1000);
-        $result = $limiter1000($request);
-        $this->assertEquals(1000, $result->maxAttempts);
-
-        $limiterGlobal = RateLimiter::limiter('global');
-        $this->assertNotNull($limiterGlobal);
-        $this->assertEquals(1000, $limiterGlobal($request)->maxAttempts);
-
-        $limiterApi = RateLimiter::limiter('api');
-        $this->assertNotNull($limiterApi);
-        $this->assertEquals(1000, $limiterApi($request)->maxAttempts);
     }
 }

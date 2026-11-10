@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Features\Ai\Contracts\AiClientInterface;
@@ -17,18 +19,12 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         $this->app->bind(StockRepositoryInterface::class, StockRepository::class);
         $this->app->bind(AiClientInterface::class, OpenAiStockGeneratorService::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         if (config('app.force_https', false) || $this->app->environment('production')) {
