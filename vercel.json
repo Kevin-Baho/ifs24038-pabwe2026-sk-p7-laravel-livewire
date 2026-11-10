@@ -2,6 +2,7 @@
   "version": 2,
   "outputDirectory": "public",
   "framework": null,
+  "buildCommand": "npm run build",
   "functions": {
     "api/index.php": {
       "runtime": "vercel-php@0.7.4"
@@ -22,8 +23,10 @@
     }
   ],
   "env": {
+    "APP_NAME": "StockPro",
     "APP_ENV": "production",
-    "APP_DEBUG": "true",
+    "APP_KEY": "base64:P9L3SY2/90CnF3q2roWDYSJ62MRbwa4LAe8AUd/MHdc=",
+    "APP_DEBUG": "false",
     "LOG_CHANNEL": "stderr",
     "VIEW_COMPILED_PATH": "/tmp/views",
     "CACHE_STORE": "array",

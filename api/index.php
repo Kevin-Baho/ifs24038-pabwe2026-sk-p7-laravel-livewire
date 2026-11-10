@@ -32,7 +32,17 @@ try {
         copy($srcPackages, $dstPackages);
     }
 
-    // 4. Setup SQLite di /tmp
+    // 4. Setup Storage di /tmp/storage agar upload file dan temporary data writable
+    $storagePath = '/tmp/storage';
+    if (!is_dir($storagePath)) {
+        mkdir($storagePath . '/framework/views', 0755, true);
+        mkdir($storagePath . '/framework/sessions', 0755, true);
+        mkdir($storagePath . '/framework/cache', 0755, true);
+        mkdir($storagePath . '/logs', 0755, true);
+        mkdir($storagePath . '/app/public', 0755, true);
+    }
+
+    // 5. Setup SQLite di /tmp
     $dbFile        = '/tmp/database.sqlite';
     $needMigration = !file_exists($dbFile) || filesize($dbFile) === 0;
     if (!file_exists($dbFile)) {
@@ -53,25 +63,33 @@ try {
     $_SERVER['CACHE_STORE']    = 'array';
     $_SERVER['SESSION_DRIVER'] = 'cookie';
 
+    // Fallback APP_KEY jika belum diset di environment variables
+    if (empty(getenv('APP_KEY')) && empty($_ENV['APP_KEY'])) {
+        $appKey = 'base64:P9L3SY2/90CnF3q2roWDYSJ62MRbwa4LAe8AUd/MHdc=';
+        putenv("APP_KEY={$appKey}");
+        $_ENV['APP_KEY']    = $appKey;
+        $_SERVER['APP_KEY'] = $appKey;
+    }
+
     require __DIR__ . '/../vendor/autoload.php';
 
     /** @var \Illuminate\Foundation\Application $app */
     $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-    // 5. Redirect bootstrap path ke /tmp sehingga services.php & packages.php
-    //    ditulis ke /tmp/bootstrap/cache (writable) bukan bootstrap/cache (read-only)
+    // 6. Redirect bootstrap path dan storage path ke /tmp
     $app->useBootstrapPath('/tmp/bootstrap');
+    $app->useStoragePath($storagePath);
 
-    // 6. Tangkap request dan daftarkan ke container SEBELUM kernel/bootstrap apapun,
+    // 7. Tangkap request dan daftarkan ke container SEBELUM kernel/bootstrap apapun,
     //    supaya UrlGenerator mendapat instance Request yang valid saat boot.
     $request = \Illuminate\Http\Request::capture();
     $app->instance('request', $request);
 
-    // 7. Boot kernel — semua service provider terdaftar di sini
+    // 8. Boot kernel — semua service provider terdaftar di sini
     $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
     $kernel->bootstrap();
 
-    // 8. Jalankan migrasi & seeding otomatis pada database baru
+    // 9. Jalankan migrasi & seeding otomatis pada database baru
     if ($needMigration) {
         try {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
@@ -81,7 +99,7 @@ try {
         }
     }
 
-    // 9. Handle request & kirim response
+    // 10. Handle request & kirim response
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
