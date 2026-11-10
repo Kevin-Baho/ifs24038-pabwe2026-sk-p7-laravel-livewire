@@ -6,7 +6,7 @@
             </div>
             <!-- Heading Level 1 Wajib -->
             <h1 class="text-2xl font-bold text-slate-100">Buat Akun Member</h1>
-            <p class="mt-1 text-sm text-slate-300">
+            <p class="mt-1 text-sm text-slate-200">
                 Mulai kelola inventaris barang secara terpusat dan modern
             </p>
         </div>
@@ -14,37 +14,37 @@
         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl backdrop-blur-sm">
             <form wire:submit="register" class="space-y-4">
                 <div>
-                    <label for="register-name" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
+                    <label for="register-name" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
                     <input id="register-name" type="text" wire:model="name" aria-label="Nama Lengkap" placeholder="John Doe"
-                           class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2 text-sm text-slate-100 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                    @error('name') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    @error('name') <p class="mt-1 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label for="register-username" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Username</label>
+                    <label for="register-username" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Username</label>
                     <input id="register-username" type="text" wire:model="username" aria-label="Username" placeholder="johndoe"
-                           class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2 text-sm text-slate-100 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                    @error('username') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm font-mono text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    @error('username') <p class="mt-1 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label for="register-email" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Email</label>
+                    <label for="register-email" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Email</label>
                     <input id="register-email" type="email" wire:model="email" aria-label="Email" placeholder="john@example.com"
-                           class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2 text-sm text-slate-100 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                    @error('email') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    @error('email') <p class="mt-1 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label for="register-password" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Password</label>
+                        <label for="register-password" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Password</label>
                         <input id="register-password" type="password" wire:model="password" aria-label="Password" placeholder="••••••••"
-                               class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2 text-sm text-slate-100 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                        @error('password') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                               class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                        @error('password') <p class="mt-1 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label for="register-password-confirmation" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Konfirmasi</label>
+                        <label for="register-password-confirmation" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Konfirmasi</label>
                         <input id="register-password-confirmation" type="password" wire:model="password_confirmation" aria-label="Konfirmasi Password" placeholder="••••••••"
-                               class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2 text-sm text-slate-100 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                               class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     </div>
                 </div>
 
@@ -66,9 +66,9 @@
                     </button>
                 </div>
 
-                <div class="pt-2 border-t border-slate-800/80 text-center text-xs text-slate-300">
+                <div class="pt-2 border-t border-slate-800 text-center text-xs text-slate-200">
                     Sudah memiliki akun?
-                    <a href="{{ route('login') }}" class="text-indigo-400 hover:text-indigo-300 font-medium ml-1">
+                    <a href="{{ route('login') }}" class="text-indigo-400 hover:text-indigo-300 font-semibold ml-1">
                         Masuk di sini
                     </a>
                 </div>

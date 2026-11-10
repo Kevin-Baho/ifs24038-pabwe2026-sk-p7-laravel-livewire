@@ -6,7 +6,7 @@
             </div>
             <!-- Heading Level 1 Wajib -->
             <h1 class="text-2xl font-bold text-slate-100">Masuk ke Akun Anda</h1>
-            <p class="mt-1 text-sm text-slate-300">
+            <p class="mt-1 text-sm text-slate-200">
                 Kelola stok dan inventaris barang dengan efisiensi tinggi
             </p>
         </div>
@@ -14,10 +14,10 @@
         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl backdrop-blur-sm">
             <form wire:submit="login" class="space-y-5">
                 @if($errors->any())
-                    <div class="p-3.5 rounded-lg bg-rose-950/60 border border-rose-800/60 text-rose-300 text-sm space-y-1">
+                    <div class="p-3.5 rounded-lg bg-rose-950/80 border border-rose-500 text-rose-100 text-sm space-y-1">
                         @foreach($errors->all() as $error)
                             <p class="flex items-center gap-2">
-                                <span class="text-rose-400 text-xs">●</span>
+                                <span class="text-rose-300 font-bold">●</span>
                                 <span>{{ $error }}</span>
                             </p>
                         @endforeach
@@ -25,7 +25,7 @@
                 @endif
 
                 <div>
-                    <label for="login-username" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">
+                    <label for="login-username" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">
                         Username atau Email
                     </label>
                     <input
@@ -35,13 +35,13 @@
                         autocomplete="username"
                         aria-label="Username atau Email"
                         placeholder="admin atau member"
-                        class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     >
-                    @error('username') <p class="mt-1.5 text-xs text-rose-400">{{ $message }}</p> @enderror
+                    @error('username') <p class="mt-1.5 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label for="login-password" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">
+                    <label for="login-password" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">
                         Password
                     </label>
                     <input
@@ -51,9 +51,9 @@
                         autocomplete="current-password"
                         aria-label="Password"
                         placeholder="••••••••"
-                        class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     >
-                    @error('password') <p class="mt-1.5 text-xs text-rose-400">{{ $message }}</p> @enderror
+                    @error('password') <p class="mt-1.5 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="flex items-center justify-between">
@@ -83,16 +83,16 @@
                     </button>
                 </div>
 
-                <div class="pt-2 border-t border-slate-800/80 text-center text-xs text-slate-300">
+                <div class="pt-2 border-t border-slate-800 text-center text-xs text-slate-200">
                     Belum punya akun?
-                    <a href="{{ route('register') }}" class="text-indigo-400 hover:text-indigo-300 font-medium ml-1">
+                    <a href="{{ route('register') }}" class="text-indigo-400 hover:text-indigo-300 font-semibold ml-1">
                         Daftar sebagai Member
                     </a>
                 </div>
             </form>
         </div>
 
-        <!-- High Contrast Kredensial Bawaan -->
+        <!-- Kredensial Kontras Tinggi (Lolos WCAG 4.5:1) -->
         <div class="text-center font-mono text-xs text-slate-200">
             Kredensial Bawaan: <span class="text-white font-bold">admin / admin</span> &nbsp;•&nbsp; <span class="text-white font-bold">member / member</span>
         </div>

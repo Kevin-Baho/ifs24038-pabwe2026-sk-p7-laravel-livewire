@@ -90,16 +90,16 @@
                             @auth
                                 @if(auth()->user()->isAdmin())
                                     <a href="{{ route('admin.users') }}"
-                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.*') ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 font-semibold' : 'text-slate-200 hover:text-white hover:bg-slate-800/60' }}">
-                                        Pengguna & Stok
+                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.*') ? 'bg-indigo-600/15 text-indigo-200 border border-indigo-500/30 font-semibold' : 'text-slate-100 hover:text-white hover:bg-slate-800/60' }}">
+                                        Pengguna &amp; Stok
                                     </a>
                                 @else
                                     <a href="{{ route('stocks.index') }}"
-                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('stocks.*') ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 font-semibold' : 'text-slate-200 hover:text-white hover:bg-slate-800/60' }}">
+                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('stocks.*') ? 'bg-indigo-600/15 text-indigo-200 border border-indigo-500/30 font-semibold' : 'text-slate-100 hover:text-white hover:bg-slate-800/60' }}">
                                         Manajemen Stok
                                     </a>
                                     <a href="{{ route('profile') }}"
-                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('profile') ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 font-semibold' : 'text-slate-200 hover:text-white hover:bg-slate-800/60' }}">
+                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('profile') ? 'bg-indigo-600/15 text-indigo-200 border border-indigo-500/30 font-semibold' : 'text-slate-100 hover:text-white hover:bg-slate-800/60' }}">
                                         Profil Akun
                                     </a>
                                 @endif
@@ -110,15 +110,14 @@
                     <div class="flex items-center space-x-3">
                         @auth
                             <div class="flex items-center gap-3">
-                                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-slate-800/60 transition group" aria-label="Buka Profil">
+                                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-slate-800/60 transition group" aria-label="Buka Profil Pengguna">
                                     <img src="{{ auth()->user()->profilePhotoUrl() }}" alt="{{ auth()->user()->name }}"
                                          class="w-7 h-7 rounded-full object-cover ring-1 ring-slate-700 group-hover:ring-indigo-500 transition">
                                     <div class="hidden md:block text-left text-xs">
                                         <div class="text-slate-100 font-medium leading-none">{{ auth()->user()->name }}</div>
-                                        <div class="text-slate-300 text-[10px] leading-tight font-mono mt-0.5">&#64;{{ auth()->user()->username }}</div>
+                                        <div class="text-slate-200 text-[10px] leading-tight font-mono mt-0.5">&#64;<span>{{ auth()->user()->username }}</span></div>
                                     </div>
-                                    <!-- High-contrast Badge (Lolos WCAG) -->
-                                    <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-indigo-500/40 bg-indigo-950/90 text-indigo-200 font-bold">
+                                    <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-indigo-400 bg-indigo-950 text-indigo-100 font-bold">
                                         {{ auth()->user()->role }}
                                     </span>
                                 </a>
@@ -127,13 +126,13 @@
                                     @csrf
                                     <button type="submit"
                                             aria-label="Keluar dari akun"
-                                            class="px-3 py-1.5 rounded-lg text-xs font-medium text-rose-300 hover:text-rose-200 hover:bg-rose-950/40 border border-slate-800 hover:border-rose-900/50 transition">
+                                            class="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-200 hover:text-white hover:bg-rose-950/60 border border-rose-800 transition">
                                         Keluar
                                     </button>
                                 </form>
                             </div>
                         @else
-                            <a href="{{ route('login') }}" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white rounded-lg hover:bg-slate-800 transition">
+                            <a href="{{ route('login') }}" class="px-3.5 py-1.5 text-xs font-semibold text-slate-100 hover:text-white rounded-lg hover:bg-slate-800 transition">
                                 Masuk
                             </a>
                             <a href="{{ route('register') }}" class="px-3.5 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-sm transition">
@@ -148,7 +147,7 @@
         <!-- Main Workspace -->
         <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1">
             @if(session('success'))
-                <div class="mb-6 p-4 rounded-xl bg-emerald-950/70 border border-emerald-800/80 text-emerald-200 text-sm flex items-center justify-between shadow-sm">
+                <div class="mb-6 p-4 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-100 text-sm flex items-center justify-between shadow-sm">
                     <div class="flex items-center gap-2.5">
                         <span class="text-emerald-300 font-bold">✓</span>
                         <span>{{ session('success') }}</span>
@@ -157,7 +156,7 @@
             @endif
 
             @if(session('error'))
-                <div class="mb-6 p-4 rounded-xl bg-rose-950/70 border border-rose-800/80 text-rose-200 text-sm flex items-center justify-between shadow-sm">
+                <div class="mb-6 p-4 rounded-xl bg-rose-950/80 border border-rose-500 text-rose-100 text-sm flex items-center justify-between shadow-sm">
                     <div class="flex items-center gap-2.5">
                         <span class="text-rose-300 font-bold">✕</span>
                         <span>{{ session('error') }}</span>
@@ -169,8 +168,8 @@
             @yield('content')
         </main>
 
-        <!-- Footer (High Contrast text-slate-200) -->
-        <footer class="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-200 font-mono">
+        <!-- Footer High Contrast (Lolos WCAG AAA) -->
+        <footer class="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-slate-200 font-mono">
             StockPro &copy; {{ date('Y') }} — Sleek Dark Theme Inventory Management System
         </footer>
     </div>
