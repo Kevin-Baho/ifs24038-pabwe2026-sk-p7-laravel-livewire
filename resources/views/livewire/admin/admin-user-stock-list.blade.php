@@ -33,24 +33,24 @@
                    type="text"
                    wire:model.live.debounce.300ms="search"
                    placeholder="Cari nama barang atau SKU milik pengguna..."
-                   aria-label="Cari nama barang atau SKU milik pengguna"
                    class="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
         </div>
     </div>
 
     <!-- Table -->
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-400" tabindex="0" role="region" aria-label="Tabel stok milik pengguna (dapat digulir)">
             <table class="w-full text-left text-sm">
+                <caption class="sr-only">Daftar stok milik pengguna</caption>
                 <thead class="bg-slate-950/80 border-b border-slate-800 text-[11px] font-mono uppercase tracking-wider text-slate-300">
                     <tr>
-                        <th class="py-3.5 px-4 text-center w-12">No</th>
-                        <th class="py-3.5 px-4">Nama Produk</th>
-                        <th class="py-3.5 px-4">SKU</th>
-                        <th class="py-3.5 px-4 text-right">Kuantitas</th>
-                        <th class="py-3.5 px-4">Satuan</th>
-                        <th class="py-3.5 px-4 text-right">Harga Satuan</th>
-                        <th class="py-3.5 px-4 text-center">Status</th>
+                        <th scope="col" class="py-3.5 px-4 text-center w-12">No</th>
+                        <th scope="col" class="py-3.5 px-4">Nama Produk</th>
+                        <th scope="col" class="py-3.5 px-4">SKU</th>
+                        <th scope="col" class="py-3.5 px-4 text-right">Kuantitas</th>
+                        <th scope="col" class="py-3.5 px-4">Satuan</th>
+                        <th scope="col" class="py-3.5 px-4 text-right">Harga Satuan</th>
+                        <th scope="col" class="py-3.5 px-4 text-center">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-800/60">

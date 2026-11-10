@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-950 dark">
+<html lang="id" class="h-full bg-slate-950 dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -125,6 +125,10 @@
     @livewireStyles
 </head>
 <body class="h-full bg-slate-950 text-slate-100 antialiased selection:bg-indigo-600 selection:text-white flex flex-col min-h-screen">
+    <a href="#main-content"
+       class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-indigo-700 focus:text-white focus:font-semibold focus:outline-none focus:ring-2 focus:ring-white">
+        Lewati ke konten utama
+    </a>
     <div class="min-h-full flex flex-col flex-1">
         <!-- Navigation -->
         <nav class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-sm" aria-label="Navigasi Utama">
@@ -197,9 +201,9 @@
         </nav>
 
         <!-- Main Workspace -->
-        <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1">
+        <main id="main-content" tabindex="-1" class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 focus:outline-none">
             @if(session('success'))
-                <div class="mb-6 p-4 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-100 text-sm flex items-center justify-between shadow-sm">
+                <div role="status" class="mb-6 p-4 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-100 text-sm flex items-center justify-between shadow-sm">
                     <div class="flex items-center gap-2.5">
                         <span class="text-emerald-300 font-bold">✓</span>
                         <span>{{ session('success') }}</span>
@@ -208,7 +212,7 @@
             @endif
 
             @if(session('error'))
-                <div class="mb-6 p-4 rounded-xl bg-rose-950/80 border border-rose-500 text-rose-100 text-sm flex items-center justify-between shadow-sm">
+                <div role="alert" class="mb-6 p-4 rounded-xl bg-rose-950/80 border border-rose-500 text-rose-100 text-sm flex items-center justify-between shadow-sm">
                     <div class="flex items-center gap-2.5">
                         <span class="text-rose-300 font-bold">✕</span>
                         <span>{{ session('error') }}</span>

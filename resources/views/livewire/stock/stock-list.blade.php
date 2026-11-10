@@ -68,14 +68,12 @@
                            type="text"
                            wire:model.live.debounce.300ms="search"
                            placeholder="Cari nama produk, SKU..."
-                           aria-label="Cari nama produk atau SKU"
                            class="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                 </div>
 
                 <label for="statusFilter" class="sr-only">Filter Status Stok</label>
                 <select id="statusFilter"
                         wire:model.live="statusFilter"
-                        aria-label="Filter status stok barang"
                         class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     <option value="">Semua Status</option>
                     @foreach($statusOptions as $s)
@@ -86,7 +84,6 @@
                 <label for="perPage" class="sr-only">Jumlah item per halaman</label>
                 <select id="perPage"
                         wire:model.live="perPage"
-                        aria-label="Jumlah barang per halaman"
                         class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     <option value="10">10 / halaman</option>
                     <option value="25">25 / halaman</option>
@@ -129,26 +126,35 @@
 
     <!-- STOCK TABLE -->
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-400" tabindex="0" role="region" aria-label="Tabel daftar stok (dapat digulir)">
             <table class="w-full text-left text-sm">
+                <caption class="sr-only">Daftar stok dan inventaris barang</caption>
                 <thead class="bg-slate-950 border-b border-slate-800 text-[11px] font-mono uppercase tracking-wider text-slate-200">
                     <tr>
-                        <th class="py-3.5 px-4 text-center w-12">No</th>
-                        <th class="py-3.5 px-4 cursor-pointer hover:text-white transition select-none" wire:click="sortBy('name')">
-                            Barang &amp; Spesifikasi @if($sortBy==='name') <span class="text-indigo-400">{{ $sortDir==='asc'?'↑':'↓' }}</span> @endif
+                        <th scope="col" class="py-3.5 px-4 text-center w-12">No</th>
+                        <th scope="col" class="py-3.5 px-4" aria-sort="{{ $sortBy==='name' ? ($sortDir==='asc' ? 'ascending' : 'descending') : 'none' }}">
+                            <button type="button" wire:click="sortBy('name')" class="font-mono uppercase tracking-wider hover:text-white transition rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400">
+                                Barang &amp; Spesifikasi @if($sortBy==='name') <span aria-hidden="true" class="text-indigo-400">{{ $sortDir==='asc'?'↑':'↓' }}</span> @endif
+                            </button>
                         </th>
-                        <th class="py-3.5 px-4 cursor-pointer hover:text-white transition select-none" wire:click="sortBy('sku')">
-                            SKU @if($sortBy==='sku') <span class="text-indigo-400">{{ $sortDir==='asc'?'↑':'↓' }}</span> @endif
+                        <th scope="col" class="py-3.5 px-4" aria-sort="{{ $sortBy==='sku' ? ($sortDir==='asc' ? 'ascending' : 'descending') : 'none' }}">
+                            <button type="button" wire:click="sortBy('sku')" class="font-mono uppercase tracking-wider hover:text-white transition rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400">
+                                SKU @if($sortBy==='sku') <span aria-hidden="true" class="text-indigo-400">{{ $sortDir==='asc'?'↑':'↓' }}</span> @endif
+                            </button>
                         </th>
-                        <th class="py-3.5 px-4 text-right cursor-pointer hover:text-white transition select-none" wire:click="sortBy('quantity')">
-                            Kuantitas Unit @if($sortBy==='quantity') <span class="text-indigo-400">{{ $sortDir==='asc'?'↑':'↓' }}</span> @endif
+                        <th scope="col" class="py-3.5 px-4 text-right" aria-sort="{{ $sortBy==='quantity' ? ($sortDir==='asc' ? 'ascending' : 'descending') : 'none' }}">
+                            <button type="button" wire:click="sortBy('quantity')" class="font-mono uppercase tracking-wider hover:text-white transition rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400">
+                                Kuantitas Unit @if($sortBy==='quantity') <span aria-hidden="true" class="text-indigo-400">{{ $sortDir==='asc'?'↑':'↓' }}</span> @endif
+                            </button>
                         </th>
-                        <th class="py-3.5 px-4">Satuan</th>
-                        <th class="py-3.5 px-4 text-right cursor-pointer hover:text-white transition select-none" wire:click="sortBy('price')">
-                            Harga Satuan @if($sortBy==='price') <span class="text-indigo-400">{{ $sortDir==='asc'?'↑':'↓' }}</span> @endif
+                        <th scope="col" class="py-3.5 px-4">Satuan</th>
+                        <th scope="col" class="py-3.5 px-4 text-right" aria-sort="{{ $sortBy==='price' ? ($sortDir==='asc' ? 'ascending' : 'descending') : 'none' }}">
+                            <button type="button" wire:click="sortBy('price')" class="font-mono uppercase tracking-wider hover:text-white transition rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400">
+                                Harga Satuan @if($sortBy==='price') <span aria-hidden="true" class="text-indigo-400">{{ $sortDir==='asc'?'↑':'↓' }}</span> @endif
+                            </button>
                         </th>
-                        <th class="py-3.5 px-4 text-center">Status</th>
-                        <th class="py-3.5 px-4 text-right">Aksi</th>
+                        <th scope="col" class="py-3.5 px-4 text-center">Status</th>
+                        <th scope="col" class="py-3.5 px-4 text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-800">
@@ -255,7 +261,7 @@
     <!-- MODAL 1: FORM CREATE / EDIT (With Toast UI Editor) -->
     @if($showFormModal)
     <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl text-slate-100"
+        <div role="dialog" aria-modal="true" aria-labelledby="form-modal-title" class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl text-slate-100"
              x-data="{
                 description: @entangle('description'),
                 initEditor() {
@@ -283,7 +289,7 @@
                     <span class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm font-bold">
                         {{ $editingStockId ? '✏️' : '➕' }}
                     </span>
-                    <h2 class="text-base font-bold text-slate-100">
+                    <h2 id="form-modal-title" class="text-base font-bold text-slate-100">
                         {{ $editingStockId ? 'Perbarui Informasi Stok' : 'Tambah Stok Barang Baru' }}
                     </h2>
                 </div>
@@ -345,7 +351,7 @@
 
                 <div>
                     <label for="cover" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Foto Cover Barang</label>
-                    <input id="cover" type="file" wire:model="cover" accept="image/*" aria-label="Upload gambar cover produk"
+                    <input id="cover" type="file" wire:model="cover" accept="image/*"
                            class="block w-full text-xs text-slate-200 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-100 hover:file:bg-slate-700 cursor-pointer">
                     @error('cover') <p class="mt-1 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                 </div>
@@ -370,11 +376,11 @@
     <!-- MODAL 2: IMPORT EXCEL -->
     @if($showImportModal)
     <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl text-slate-100 p-6">
+        <div role="dialog" aria-modal="true" aria-labelledby="import-modal-title" class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl text-slate-100 p-6">
             <div class="flex items-center justify-between pb-4 border-b border-slate-800">
                 <div class="flex items-center gap-2.5">
                     <span class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-bold">📂</span>
-                    <h2 class="text-base font-bold">Import Data Spreadsheet</h2>
+                    <h2 id="import-modal-title" class="text-base font-bold">Import Data Spreadsheet</h2>
                 </div>
                 <button wire:click="$set('showImportModal', false)" aria-label="Tutup modal import" class="text-slate-200 hover:text-white text-xl font-mono leading-none">&times;</button>
             </div>
@@ -383,7 +389,7 @@
                 <div>
                     <label for="import-file-input" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-2">Pilih File (.xlsx, .xls, .csv)</label>
                     <div class="p-6 border-2 border-dashed border-slate-700 rounded-xl bg-slate-950/60 text-center hover:border-slate-600 transition">
-                        <input id="import-file-input" type="file" wire:model="importFile" accept=".xlsx,.xls,.csv" aria-label="Pilih File Spreadsheet" class="w-full text-xs text-slate-200 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-100 hover:file:bg-slate-700 cursor-pointer">
+                        <input id="import-file-input" type="file" wire:model="importFile" accept=".xlsx,.xls,.csv" class="w-full text-xs text-slate-200 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-100 hover:file:bg-slate-700 cursor-pointer">
                     </div>
                     @error('importFile') <p class="mt-2 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                 </div>
@@ -413,11 +419,11 @@
     <!-- MODAL 3: AI STOCK GENERATOR -->
     @if($showAiModal)
     <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl text-slate-100">
+        <div role="dialog" aria-modal="true" aria-labelledby="ai-modal-title" class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl text-slate-100">
             <div class="flex items-center justify-between p-5 border-b border-slate-800">
                 <div class="flex items-center gap-2.5">
                     <span class="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-sm font-bold">✨</span>
-                    <h2 class="text-base font-bold">AI Stock Generator (OpenAI)</h2>
+                    <h2 id="ai-modal-title" class="text-base font-bold">AI Stock Generator (OpenAI)</h2>
                 </div>
                 <button wire:click="$set('showAiModal', false)" aria-label="Tutup modal AI" class="text-slate-200 hover:text-white text-xl font-mono leading-none">&times;</button>
             </div>
@@ -511,14 +517,14 @@
     <!-- MODAL 4: KONFIRMASI HAPUS BARANG -->
     @if($showDeleteModal)
     <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl text-slate-100 p-6">
+        <div role="alertdialog" aria-modal="true" aria-labelledby="delete-modal-title" aria-describedby="delete-modal-desc" class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl text-slate-100 p-6">
             <div class="flex items-start gap-4">
                 <div class="w-10 h-10 rounded-xl bg-rose-950/80 border border-rose-500 text-rose-300 flex items-center justify-center text-lg flex-shrink-0">
                     ⚠️
                 </div>
                 <div>
-                    <h2 class="text-base font-bold text-slate-100">Konfirmasi Hapus Barang</h2>
-                    <p class="mt-2 text-xs text-slate-200 leading-relaxed">
+                    <h2 id="delete-modal-title" class="text-base font-bold text-slate-100">Konfirmasi Hapus Barang</h2>
+                    <p id="delete-modal-desc" class="mt-2 text-xs text-slate-200 leading-relaxed">
                         Apakah Anda yakin ingin menghapus barang <strong class="text-white font-bold">"{{ $deletingStockName }}"</strong>? Tindakan ini bersifat permanen dan tidak dapat dibatalkan.
                     </p>
                 </div>

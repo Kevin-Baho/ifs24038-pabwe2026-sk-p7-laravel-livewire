@@ -48,7 +48,7 @@
                     @endif
 
                     @if(!$isReadOnly && $stock->cover_image_path)
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition flex items-center justify-center gap-2">
                             <button wire:click="removeCover"
                                     aria-label="Hapus Foto Cover"
                                     class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white transition">
@@ -64,7 +64,7 @@
                             {{ $stock->cover_image_path ? 'Ganti Cover Barang' : 'Unggah Cover Barang' }}
                         </label>
                         <div class="flex items-center gap-2">
-                            <input id="cover" type="file" wire:model="cover" accept="image/*" aria-label="Upload gambar cover produk"
+                            <input id="cover" type="file" wire:model="cover" accept="image/*"
                                    class="text-xs text-slate-200 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-100 hover:file:bg-slate-700 cursor-pointer w-full">
                         </div>
                         @if($cover)
@@ -207,7 +207,7 @@
     <!-- MODAL EDIT INFORMASI BARANG LENGKAP -->
     @if($showEditModal && !$isReadOnly)
     <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl text-slate-100"
+        <div role="dialog" aria-modal="true" aria-labelledby="edit-modal-title" class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl text-slate-100"
              x-data="{
                 description: @entangle('description'),
                 initEditor() {
@@ -233,7 +233,7 @@
             <div class="flex items-center justify-between p-5 border-b border-slate-800">
                 <div class="flex items-center gap-2.5">
                     <span class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm font-bold">✏️</span>
-                    <h2 class="text-base font-bold text-slate-100">Edit Informasi Barang</h2>
+                    <h2 id="edit-modal-title" class="text-base font-bold text-slate-100">Edit Informasi Barang</h2>
                 </div>
                 <button wire:click="$set('showEditModal', false)" aria-label="Tutup modal edit" class="text-slate-200 hover:text-white text-xl font-mono leading-none">&times;</button>
             </div>
@@ -241,7 +241,7 @@
             <form wire:submit="saveEdit" class="p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
                     <label for="edit-stock-name" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Nama Produk *</label>
-                    <input id="edit-stock-name" type="text" wire:model="name" aria-label="Nama Produk"
+                    <input id="edit-stock-name" type="text" wire:model="name"
                            class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     @error('name') <p class="mt-1 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                 </div>
@@ -249,12 +249,12 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label for="edit-stock-sku" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">SKU</label>
-                        <input id="edit-stock-sku" type="text" wire:model="sku" aria-label="SKU"
+                        <input id="edit-stock-sku" type="text" wire:model="sku"
                                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     </div>
                     <div>
                         <label for="edit-stock-unit" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Satuan Unit *</label>
-                        <input id="edit-stock-unit" type="text" wire:model="unit" aria-label="Satuan Unit"
+                        <input id="edit-stock-unit" type="text" wire:model="unit"
                                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                         @error('unit') <p class="mt-1 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                     </div>
@@ -263,19 +263,19 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label for="edit-stock-quantity" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Kuantitas Fisik *</label>
-                        <input id="edit-stock-quantity" type="number" wire:model="quantity" min="0" aria-label="Kuantitas Fisik"
+                        <input id="edit-stock-quantity" type="number" wire:model="quantity" min="0"
                                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                         @error('quantity') <p class="mt-1 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label for="edit-stock-minStock" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Batas Min. Stok *</label>
-                        <input id="edit-stock-minStock" type="number" wire:model="minStock" min="0" aria-label="Batas Minimum Stok"
+                        <input id="edit-stock-minStock" type="number" wire:model="minStock" min="0"
                                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                         @error('minStock') <p class="mt-1 text-xs text-rose-300 font-medium">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label for="edit-stock-price" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Harga Satuan (Rp)</label>
-                        <input id="edit-stock-price" type="number" wire:model="price" min="0" step="0.01" aria-label="Harga Satuan"
+                        <input id="edit-stock-price" type="number" wire:model="price" min="0" step="0.01"
                                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     </div>
                 </div>
@@ -292,7 +292,7 @@
 
                 <div>
                     <label for="edit-stock-cover" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Ganti Foto Cover</label>
-                    <input id="edit-stock-cover" type="file" wire:model="cover" accept="image/*" aria-label="Ganti foto cover"
+                    <input id="edit-stock-cover" type="file" wire:model="cover" accept="image/*"
                            class="block w-full text-xs text-slate-200 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-100 hover:file:bg-slate-700 cursor-pointer">
                 </div>
 

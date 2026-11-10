@@ -25,7 +25,7 @@
 
             <div class="w-full space-y-2">
                 <label for="profilePhotoInput" class="sr-only">Upload Foto Profil Baru</label>
-                <input type="file" wire:model="photo" id="profilePhotoInput" aria-label="Upload Foto Profil Baru" accept="image/*" class="hidden">
+                <input type="file" wire:model="photo" id="profilePhotoInput" accept="image/*" class="hidden">
                 
                 <button type="button" onclick="document.getElementById('profilePhotoInput').click()" aria-label="Upload Foto Baru" class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
                     Upload Foto Baru
@@ -51,20 +51,20 @@
                 <form wire:submit.prevent="updateProfileInformation" class="space-y-4">
                     <div>
                         <label for="profile-name" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
-                        <input wire:model="name" type="text" id="profile-name" aria-label="Nama Lengkap" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        <input wire:model="name" type="text" id="profile-name" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                         @error('name') <span class="text-xs text-rose-300 font-medium mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label for="profile-username" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Username</label>
-                            <input wire:model="username" type="text" id="profile-username" aria-label="Username" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            <input wire:model="username" type="text" id="profile-username" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                             @error('username') <span class="text-xs text-rose-300 font-medium mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label for="profile-email" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Email</label>
-                            <input wire:model="email" type="email" id="profile-email" aria-label="Alamat Email" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            <input wire:model="email" type="email" id="profile-email" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                             @error('email') <span class="text-xs text-rose-300 font-medium mt-1 block">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -84,20 +84,20 @@
                 <form wire:submit.prevent="updatePassword" class="space-y-4">
                     <div>
                         <label for="profile-current-password" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Password Saat Ini</label>
-                        <input wire:model="current_password" type="password" id="profile-current-password" aria-label="Password Saat Ini" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Password saat ini" required>
+                        <input wire:model="current_password" type="password" id="profile-current-password" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Password saat ini" required>
                         @error('current_password') <span class="text-xs text-rose-300 font-medium mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label for="profile-new-password" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Password Baru</label>
-                            <input wire:model="password" type="password" id="profile-new-password" aria-label="Password Baru" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Minimal 8 karakter" required>
+                            <input wire:model="password" type="password" id="profile-new-password" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Minimal 8 karakter" required>
                             @error('password') <span class="text-xs text-rose-300 font-medium mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label for="profile-password-confirmation" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">Konfirmasi Password Baru</label>
-                            <input wire:model="password_confirmation" type="password" id="profile-password-confirmation" aria-label="Konfirmasi Password Baru" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ulangi password baru" required>
+                            <input wire:model="password_confirmation" type="password" id="profile-password-confirmation" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ulangi password baru" required>
                         </div>
                     </div>
 
