@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="StockPro - Sistem Manajemen Stok & Inventaris Barang berbasis web modern dengan Livewire dan Sleek Dark Theme.">
+    <meta name="robots" content="index, follow">
     <title>{{ config('app.name', 'StockPro') }} - @yield('title', 'Sistem Manajemen Stok & Inventaris')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,35 +13,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
-                    },
-                    colors: {
-                        slate: {
-                            850: '#111827',
-                            950: '#030712',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
 
-    <!-- Toast UI Editor & Viewer -->
+    <!-- Toast UI Editor & Viewer (Deferred) -->
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js" defer></script>
 
-    <!-- Cropper.js -->
+    <!-- Cropper.js (Deferred) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" defer></script>
 
     <style>
         body {
@@ -93,11 +75,11 @@
 <body class="h-full bg-slate-950 text-slate-100 antialiased selection:bg-indigo-600 selection:text-white flex flex-col min-h-screen">
     <div class="min-h-full flex flex-col flex-1">
         <!-- Navigation -->
-        <nav class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-sm">
+        <nav class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-sm" aria-label="Navigasi Utama">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <div class="flex items-center gap-8">
-                        <a href="{{ url('/') }}" class="flex items-center gap-2.5 text-white font-bold tracking-tight text-lg group">
+                        <a href="{{ url('/') }}" class="flex items-center gap-2.5 text-white font-bold tracking-tight text-lg group" aria-label="StockPro Beranda">
                             <span class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-sm shadow-indigo-500/20 shadow-md group-hover:bg-indigo-500 transition">
                                 ⚡
                             </span>
@@ -108,16 +90,16 @@
                             @auth
                                 @if(auth()->user()->isAdmin())
                                     <a href="{{ route('admin.users') }}"
-                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.*') ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60' }}">
+                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.*') ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30' : 'text-slate-300 hover:text-white hover:bg-slate-800/60' }}">
                                         Pengguna & Stok
                                     </a>
                                 @else
                                     <a href="{{ route('stocks.index') }}"
-                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('stocks.*') ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60' }}">
+                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('stocks.*') ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30' : 'text-slate-300 hover:text-white hover:bg-slate-800/60' }}">
                                         Manajemen Stok
                                     </a>
                                     <a href="{{ route('profile') }}"
-                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('profile') ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60' }}">
+                                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('profile') ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30' : 'text-slate-300 hover:text-white hover:bg-slate-800/60' }}">
                                         Profil Akun
                                     </a>
                                 @endif
@@ -128,14 +110,14 @@
                     <div class="flex items-center space-x-3">
                         @auth
                             <div class="flex items-center gap-3">
-                                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-slate-800/60 transition group">
+                                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-slate-800/60 transition group" aria-label="Buka Profil">
                                     <img src="{{ auth()->user()->profilePhotoUrl() }}" alt="{{ auth()->user()->name }}"
                                          class="w-7 h-7 rounded-full object-cover ring-1 ring-slate-700 group-hover:ring-indigo-500 transition">
                                     <div class="hidden md:block text-left text-xs">
                                         <div class="text-slate-200 font-medium leading-none">{{ auth()->user()->name }}</div>
-                                        <div class="text-slate-500 text-[10px] leading-tight font-mono mt-0.5">@<span>{{ auth()->user()->username }}</span></div>
+                                        <div class="text-slate-300 text-[10px] leading-tight font-mono mt-0.5">@<span>{{ auth()->user()->username }}</span></div>
                                     </div>
-                                    <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-indigo-500/30 bg-indigo-950/50 text-indigo-300">
+                                    <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-indigo-500/40 bg-indigo-950/70 text-indigo-300 font-semibold">
                                         {{ auth()->user()->role }}
                                     </span>
                                 </a>
@@ -143,7 +125,7 @@
                                 <form method="POST" action="{{ route('logout') }}" class="inline">
                                     @csrf
                                     <button type="submit"
-                                            class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-950/30 border border-slate-800 hover:border-rose-900/40 transition">
+                                            class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-rose-400 hover:bg-rose-950/30 border border-slate-800 hover:border-rose-900/40 transition">
                                         Keluar
                                     </button>
                                 </form>
@@ -186,7 +168,7 @@
         </main>
 
         <!-- Footer -->
-        <footer class="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-600 font-mono">
+        <footer class="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-300 font-mono">
             StockPro &copy; {{ date('Y') }} — Sleek Dark Theme Inventory Management System
         </footer>
     </div>

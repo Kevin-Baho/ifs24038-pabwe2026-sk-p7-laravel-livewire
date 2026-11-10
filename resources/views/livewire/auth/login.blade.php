@@ -4,10 +4,10 @@
             <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-2xl mb-3 shadow-lg shadow-indigo-500/10">
                 ⚡
             </div>
-            <h2 class="text-2xl font-bold tracking-tight text-slate-100">
+            <h1 class="text-2xl font-bold tracking-tight text-slate-100">
                 Masuk ke Stock<span class="text-indigo-400">Pro</span>
-            </h2>
-            <p class="mt-1 text-sm text-slate-400">
+            </h1>
+            <p class="mt-1 text-sm text-slate-300">
                 Kelola stok dan inventaris barang dengan efisiensi tinggi
             </p>
         </div>
@@ -26,7 +26,7 @@
                 @endif
 
                 <div>
-                    <label for="login-username" class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-1.5">
+                    <label for="login-username" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">
                         Username atau Email
                     </label>
                     <input
@@ -35,14 +35,14 @@
                         wire:model="username"
                         autocomplete="username"
                         placeholder="admin atau member"
-                        class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                        class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     >
                     @error('username') <p class="mt-1.5 text-xs text-rose-400">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <div class="flex items-center justify-between mb-1.5">
-                        <label for="login-password" class="block text-xs font-medium text-slate-300 uppercase tracking-wider">
+                        <label for="login-password" class="block text-xs font-medium text-slate-200 uppercase tracking-wider">
                             Password
                         </label>
                     </div>
@@ -52,13 +52,13 @@
                         wire:model="password"
                         autocomplete="current-password"
                         placeholder="••••••••"
-                        class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                        class="w-full bg-slate-950/80 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     >
                     @error('password') <p class="mt-1.5 text-xs text-rose-400">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="flex items-center justify-between">
-                    <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-400 select-none">
+                    <label for="remember" class="flex items-center gap-2 cursor-pointer text-xs text-slate-300 select-none">
                         <input id="remember" wire:model="remember" type="checkbox"
                                class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900">
                         <span>Ingat sesi saya</span>
@@ -83,7 +83,7 @@
                     </button>
                 </div>
 
-                <div class="pt-2 border-t border-slate-800/80 text-center text-xs text-slate-400">
+                <div class="pt-2 border-t border-slate-800/80 text-center text-xs text-slate-300">
                     Belum punya akun?
                     <a href="{{ route('register') }}" class="text-indigo-400 hover:text-indigo-300 font-medium ml-1">
                         Daftar sebagai Member
@@ -92,8 +92,8 @@
             </form>
         </div>
 
-        <div class="text-center font-mono text-[11px] text-slate-500">
-            Kredensial Bawaan: <span class="text-slate-400">admin / admin</span> &nbsp;•&nbsp; <span class="text-slate-400">member / member</span>
+        <div class="text-center font-mono text-xs text-slate-300">
+            Kredensial Bawaan: <span class="text-slate-100 font-semibold">admin / admin</span> &nbsp;•&nbsp; <span class="text-slate-100 font-semibold">member / member</span>
         </div>
     </div>
 </div>
