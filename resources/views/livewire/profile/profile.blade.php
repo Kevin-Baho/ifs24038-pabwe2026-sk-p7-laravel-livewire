@@ -1,118 +1,113 @@
-<div class="max-w-2xl mx-auto space-y-6">
-    <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-        <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-100">Pengaturan Profil Pengguna</h1>
-            <p class="text-xs text-slate-300 mt-1">Perbarui identitas akun, kredensial keamanan, dan avatar profil.</p>
-        </div>
-        <span class="px-2.5 py-1 rounded-md text-xs font-mono uppercase bg-indigo-950/60 text-indigo-300 border border-indigo-500/40 font-semibold">
-            {{ $user->role }}
-        </span>
+<div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+    <div class="mb-8">
+        <!-- Level 1 Heading Wajib -->
+        <h1 class="text-2xl font-bold text-slate-100">Pengaturan Profil Saya</h1>
+        <p class="text-sm text-slate-300 mt-1">Kelola data identitas akun, foto profil rasio 1:1, dan kata sandi Anda</p>
     </div>
 
-    @if(session('status'))
-        <div class="p-4 rounded-xl bg-emerald-950/60 border border-emerald-800/60 text-emerald-300 text-sm flex items-center gap-2.5 shadow-sm">
-            <span class="text-emerald-400">✓</span>
-            <span>{{ session('status') }}</span>
-        </div>
-    @endif
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Foto Profil -->
+        <div class="bg-slate-900/90 p-6 rounded-2xl shadow-sm border border-slate-800 flex flex-col items-center text-center">
+            <h2 class="text-base font-bold text-slate-100 mb-4 self-start">Foto Profil (1:1)</h2>
 
-    <form wire:submit="save" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-        <!-- Avatar & Cropper Section -->
-        <div>
-            <label for="photo" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-3">Foto Profil (Rasio 1:1 &bull; 400x400 PNG)</label>
-            <div class="flex flex-col sm:flex-row items-center gap-6"
-                 x-data="{
-                    cropper: null,
-                    setupCropper(event) {
-                        const file = event.target.files[0];
-                        if (!file) return;
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            const img = this.$refs.cropPreview;
-                            img.src = e.target.result;
-                            img.classList.remove('hidden');
-                            if (this.cropper) {
-                                this.cropper.destroy();
-                            }
-                            this.cropper = new Cropper(img, {
-                                aspectRatio: 1,
-                                viewMode: 1,
-                                autoCropArea: 1,
-                            });
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                 }">
-                <div class="relative w-24 h-24 rounded-full overflow-hidden ring-2 ring-indigo-500/40 bg-slate-950 flex-shrink-0 shadow-lg">
-                    <img src="{{ $user->profilePhotoUrl() }}" alt="{{ $user->name }}"
-                         class="w-full h-full object-cover">
-                </div>
-
-                <div class="flex-1 w-full space-y-2">
-                    <input id="photo" type="file" wire:model="photo" accept="image/*" @change="setupCropper($event)" aria-label="Upload foto profil"
-                           class="block w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
-                    <p class="text-[11px] text-slate-300 font-mono">
-                        Format didukung: JPG, PNG, WebP (Maks. 2MB). Foto akan dipotong rasio 1:1 tepat di tengah menjadi 400x400 PNG.
-                    </p>
-                    @error('photo') <p class="text-xs text-rose-400">{{ $message }}</p> @enderror
-
-                    <!-- Cropper Preview Area -->
-                    <div class="mt-2 max-w-xs overflow-hidden rounded-lg border border-slate-800 bg-slate-950">
-                        <img x-ref="cropPreview" class="hidden max-h-48 w-full object-contain" alt="Crop Preview">
+            <div class="relative w-36 h-36 rounded-2xl overflow-hidden border-2 border-slate-700 shadow-inner mb-4 bg-slate-950 flex items-center justify-center">
+                @if ($user->profile_photo_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->profile_photo_path))
+                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($user->profile_photo_path) }}?v={{ time() }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                @else
+                    <div class="w-full h-full flex items-center justify-center bg-indigo-900 text-indigo-200 font-bold text-3xl">
+                        {{ strtoupper(substr($user->name, 0, 2)) }}
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="pt-4 border-t border-slate-800/80 grid grid-cols-1 gap-4">
-            <div>
-                <label for="profile-name" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Nama Lengkap *</label>
-                <input id="profile-name" type="text" wire:model="name" aria-label="Nama Lengkap"
-                       class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                @error('name') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
+                @endif
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label for="profile-username" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Username *</label>
-                    <input id="profile-username" type="text" wire:model="username" aria-label="Username"
-                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm font-mono text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                    @error('username') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
-                </div>
-                <div>
-                    <label for="profile-email" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Email Akun *</label>
-                    <input id="profile-email" type="email" wire:model="email" aria-label="Alamat Email"
-                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                    @error('email') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
-                </div>
+            <div class="w-full space-y-2">
+                <label for="profilePhotoInput" class="sr-only">Upload Foto Profil Baru</label>
+                <input type="file" wire:model="photo" id="profilePhotoInput" aria-label="Upload Foto Profil Baru" accept="image/*" class="hidden">
+                
+                <button type="button" onclick="document.getElementById('profilePhotoInput').click()" aria-label="Upload Foto Baru" class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                    Upload Foto Baru
+                </button>
+
+                @if ($user->profile_photo_path)
+                    <button type="button" wire:click="confirmDeletePhoto" aria-label="Hapus Foto Profil" class="w-full py-2 px-4 bg-rose-950/60 hover:bg-rose-900/70 text-rose-200 text-xs font-semibold rounded-lg border border-rose-800 transition">
+                        Hapus Foto Profil
+                    </button>
+                @endif
             </div>
+
+            <p class="text-xs text-slate-300 mt-4">
+                Mendukung format PNG, JPG, GIF hingga ukuran 5MB. Foto otomatis dipotong rasio 1:1.
+            </p>
         </div>
 
-        <!-- Security / Password -->
-        <div class="pt-4 border-t border-slate-800/80 space-y-4">
-            <h2 class="text-xs font-mono uppercase tracking-wider text-slate-300 font-semibold">Keamanan &amp; Ubah Password</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label for="profile-password" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Password Baru</label>
-                    <input id="profile-password" type="password" wire:model="password" placeholder="Kosongkan jika tidak diubah" aria-label="Password Baru"
-                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                    @error('password') <p class="mt-1 text-xs text-rose-400">{{ $message }}</p> @enderror
-                </div>
-                <div>
-                    <label for="profile-password-confirmation" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Konfirmasi Password Baru</label>
-                    <input id="profile-password-confirmation" type="password" wire:model="password_confirmation" placeholder="Ulangi password baru" aria-label="Konfirmasi Password Baru"
-                           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                </div>
+        <!-- Form Identitas & Password -->
+        <div class="lg:col-span-2 space-y-8">
+            <div class="bg-slate-900/90 p-6 rounded-2xl shadow-sm border border-slate-800">
+                <h2 class="text-base font-bold text-slate-100 mb-4 pb-2 border-b border-slate-800">Ubah Identitas Diri</h2>
+
+                <form wire:submit.prevent="updateProfileInformation" class="space-y-4">
+                    <div>
+                        <label for="profile-name" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
+                        <input wire:model="name" type="text" id="profile-name" aria-label="Nama Lengkap" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        @error('name') <span class="text-xs text-rose-300 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="profile-username" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Username</label>
+                            <input wire:model="username" type="text" id="profile-username" aria-label="Username" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            @error('username') <span class="text-xs text-rose-300 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label for="profile-email" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Email</label>
+                            <input wire:model="email" type="email" id="profile-email" aria-label="Alamat Email" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            @error('email') <span class="text-xs text-rose-300 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button type="submit" aria-label="Simpan Perubahan Identitas" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Ubah Password (Heading Semantik H2) -->
+            <div class="bg-slate-900/90 p-6 rounded-2xl shadow-sm border border-slate-800">
+                <h2 class="text-base font-bold text-slate-100 mb-4 pb-2 border-b border-slate-800">Keamanan &amp; Ubah Password</h2>
+
+                <form wire:submit.prevent="updatePassword" class="space-y-4">
+                    <div>
+                        <label for="profile-current-password" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Password Saat Ini</label>
+                        <input wire:model="current_password" type="password" id="profile-current-password" aria-label="Password Saat Ini" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Password saat ini" required>
+                        @error('current_password') <span class="text-xs text-rose-300 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="profile-new-password" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Password Baru</label>
+                            <input wire:model="password" type="password" id="profile-new-password" aria-label="Password Baru" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Minimal 8 karakter" required>
+                            @error('password') <span class="text-xs text-rose-300 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label for="profile-password-confirmation" class="block text-xs font-medium text-slate-200 uppercase tracking-wider mb-1.5">Konfirmasi Password Baru</label>
+                            <input wire:model="password_confirmation" type="password" id="profile-password-confirmation" aria-label="Konfirmasi Password Baru" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-700 bg-slate-950 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ulangi password baru" required>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button type="submit" aria-label="Perbarui Password Akun" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-lg border border-slate-700 transition">
+                            Perbarui Password
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <div class="pt-4 border-t border-slate-800/80 flex items-center justify-end gap-3">
-            <button type="submit"
-                    class="px-5 py-2.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/20 transition flex items-center gap-2"
-                    wire:loading.attr="disabled">
-                <span wire:loading.remove>Simpan Perubahan</span>
-                <span wire:loading>Menyimpan...</span>
-            </button>
-        </div>
-    </form>
+    </div>
 </div>
