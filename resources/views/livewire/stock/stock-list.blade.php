@@ -1,5 +1,5 @@
 <div>
-    <!-- PAGE TITLE (H1 for WCAG Accessibility) -->
+    <!-- PAGE TITLE (H1 Wajib untuk Aksesibilitas WCAG) -->
     <div class="mb-6">
         <h1 class="text-2xl font-bold tracking-tight text-slate-100">Daftar Stok &amp; Inventaris</h1>
         <p class="text-sm text-slate-300 mt-1">Kelola data inventaris produk, ketersediaan, dan pergerakan stok</p>
@@ -7,11 +7,11 @@
 
     <!-- METRIC BAR (Dark Theme) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <!-- Metric 1: Total Macam Barang -->
+        <!-- Metric 1 -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-medium text-slate-300 uppercase tracking-wider">Total Macam Barang</span>
-                <span class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm font-bold">📦</span>
+                <span class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 flex items-center justify-center text-sm font-bold">📦</span>
             </div>
             <div class="mt-3 flex items-baseline gap-2">
                 <span class="text-2xl font-bold font-mono tabular-nums text-slate-100">{{ number_format($metrics['totalItems'] ?? 0) }}</span>
@@ -19,11 +19,11 @@
             </div>
         </div>
 
-        <!-- Metric 2: Total Fisik Unit -->
+        <!-- Metric 2 -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-medium text-slate-300 uppercase tracking-wider">Total Fisik Unit</span>
-                <span class="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center text-sm font-bold">📊</span>
+                <span class="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-300 flex items-center justify-center text-sm font-bold">📊</span>
             </div>
             <div class="mt-3 flex items-baseline gap-2">
                 <span class="text-2xl font-bold font-mono tabular-nums text-slate-100">{{ number_format($metrics['totalUnits'] ?? 0) }}</span>
@@ -31,26 +31,26 @@
             </div>
         </div>
 
-        <!-- Metric 3: Estimasi Valuasi Aset -->
+        <!-- Metric 3 -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-medium text-slate-300 uppercase tracking-wider">Estimasi Valuasi Aset</span>
-                <span class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold">💰</span>
+                <span class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 flex items-center justify-center text-sm font-bold">💰</span>
             </div>
             <div class="mt-3 flex items-baseline gap-1">
-                <span class="text-xs text-slate-300 font-mono font-medium">Rp</span>
-                <span class="text-2xl font-bold font-mono tabular-nums text-emerald-400">{{ number_format($metrics['totalValuation'] ?? 0, 0, ',', '.') }}</span>
+                <span class="text-xs text-slate-300 font-mono font-medium mr-1">Rp</span>
+                <span class="text-2xl font-bold font-mono tabular-nums text-emerald-300">{{ number_format($metrics['totalValuation'] ?? 0, 0, ',', '.') }}</span>
             </div>
         </div>
 
-        <!-- Metric 4: Peringatan Stok Menipis -->
+        <!-- Metric 4 -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-medium text-slate-300 uppercase tracking-wider">Peringatan Stok Menipis</span>
-                <span class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-bold">⚠️</span>
+                <span class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 flex items-center justify-center text-sm font-bold">⚠️</span>
             </div>
             <div class="mt-3 flex items-baseline gap-2">
-                <span class="text-2xl font-bold font-mono tabular-nums text-amber-400">{{ number_format($metrics['lowStockCount'] ?? 0) }}</span>
+                <span class="text-2xl font-bold font-mono tabular-nums text-amber-300">{{ number_format($metrics['lowStockCount'] ?? 0) }}</span>
                 <span class="text-xs text-slate-300 font-mono font-medium">Perlu Restock</span>
             </div>
         </div>
@@ -59,24 +59,24 @@
     <!-- ACTION HEADER & TOOLBAR -->
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 mb-6 shadow-sm">
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-            <!-- Search & Filters -->
+            <!-- Search & Filters (Lengkap dengan label & aria-label) -->
             <div class="flex flex-1 flex-wrap items-center gap-3">
                 <div class="relative flex-1 min-w-[220px]">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-sm">🔍</span>
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-300 text-sm">🔍</span>
                     <label for="stock-search" class="sr-only">Cari nama produk atau SKU</label>
                     <input id="stock-search"
                            type="text"
                            wire:model.live.debounce.300ms="search"
                            placeholder="Cari nama produk, SKU..."
                            aria-label="Cari nama produk atau SKU"
-                           class="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                           class="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-100 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                 </div>
 
                 <label for="statusFilter" class="sr-only">Filter Status Stok</label>
                 <select id="statusFilter"
                         wire:model.live="statusFilter"
                         aria-label="Filter status stok barang"
-                        class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                        class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     <option value="">Semua Status</option>
                     @foreach($statusOptions as $s)
                         <option value="{{ $s->value }}">{{ $s->label() }}</option>
@@ -87,7 +87,7 @@
                 <select id="perPage"
                         wire:model.live="perPage"
                         aria-label="Jumlah barang per halaman"
-                        class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                        class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     <option value="10">10 / halaman</option>
                     <option value="25">25 / halaman</option>
                     <option value="50">50 / halaman</option>
@@ -97,24 +97,28 @@
             <!-- Action Buttons -->
             <div class="flex flex-wrap items-center gap-2">
                 <button wire:click="openAiModal"
-                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-purple-950/50 hover:bg-purple-900/60 text-purple-300 border border-purple-800/60 transition shadow-sm">
+                        aria-label="Buka AI Generator Stok"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-purple-950/60 hover:bg-purple-900/70 text-purple-200 border border-purple-800/70 transition shadow-sm">
                     <span>✨</span>
                     <span>AI Generator</span>
                 </button>
 
                 <button wire:click="openImportModal"
-                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-950/40 hover:bg-amber-900/50 text-amber-300 border border-amber-800/60 transition shadow-sm">
+                        aria-label="Import data dari spreadsheet Excel"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-950/60 hover:bg-amber-900/70 text-amber-200 border border-amber-800/70 transition shadow-sm">
                     <span>📂</span>
                     <span>Import Excel</span>
                 </button>
 
                 <button wire:click="exportExcel"
-                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-950/40 hover:bg-emerald-900/50 text-emerald-300 border border-emerald-800/60 transition shadow-sm">
+                        aria-label="Export data ke file spreadsheet Excel"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-950/60 hover:bg-emerald-900/70 text-emerald-200 border border-emerald-800/70 transition shadow-sm">
                     <span>📥</span>
                     <span>Export Excel</span>
                 </button>
 
                 <button wire:click="openCreateModal"
+                        aria-label="Tambah stok barang baru"
                         class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/20 transition">
                     <span>+</span>
                     <span>Tambah Stok</span>
@@ -127,7 +131,7 @@
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
-                <thead class="bg-slate-950/80 border-b border-slate-800 text-[11px] font-mono uppercase tracking-wider text-slate-300">
+                <thead class="bg-slate-950/80 border-b border-slate-800 text-[11px] font-mono uppercase tracking-wider text-slate-200">
                     <tr>
                         <th class="py-3.5 px-4 text-center w-12">No</th>
                         <th class="py-3.5 px-4 cursor-pointer hover:text-white transition select-none" wire:click="sortBy('name')">
@@ -150,7 +154,7 @@
                 <tbody class="divide-y divide-slate-800/60">
                     @forelse($stocks as $stock)
                         <tr class="hover:bg-slate-800/30 transition group">
-                            <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-300 font-medium">
+                            <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-200 font-medium">
                                 {{ $loop->iteration + ($stocks->currentPage() - 1) * $stocks->perPage() }}
                             </td>
                             <td class="py-3.5 px-4">
@@ -159,13 +163,13 @@
                                         <img src="{{ $stock->coverImageUrl() ?? asset('storage/'.$stock->cover_image_path) }}" alt="{{ $stock->name }}"
                                              class="w-9 h-9 rounded-lg object-cover ring-1 ring-slate-800 flex-shrink-0">
                                     @else
-                                        <div class="w-9 h-9 rounded-lg bg-slate-800 border border-slate-700/60 flex items-center justify-center text-slate-300 text-xs font-mono flex-shrink-0">
+                                        <div class="w-9 h-9 rounded-lg bg-slate-800 border border-slate-700/60 flex items-center justify-center text-slate-200 text-xs font-mono flex-shrink-0">
                                             📦
                                         </div>
                                     @endif
                                     <div>
                                         <a href="{{ route('stocks.detail', $stock->id) }}"
-                                           class="font-medium text-slate-100 hover:text-indigo-400 transition leading-snug">
+                                           class="font-medium text-slate-100 hover:text-indigo-300 transition leading-snug">
                                             {{ $stock->name }}
                                         </a>
                                         @if($stock->description)
@@ -174,7 +178,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="py-3.5 px-4 font-mono text-xs text-slate-300">
+                            <td class="py-3.5 px-4 font-mono text-xs text-slate-200">
                                 {{ $stock->sku ?: '—' }}
                             </td>
                             <td class="py-3.5 px-4 text-right">
@@ -182,19 +186,19 @@
                                     <button wire:click="decrement({{ $stock->id }})"
                                             title="Kurangi stok (-1)"
                                             aria-label="Kurangi stok {{ $stock->name }}"
-                                            class="w-6 h-6 rounded-md bg-slate-800 hover:bg-rose-950/60 hover:text-rose-400 text-slate-200 border border-slate-700 flex items-center justify-center text-xs font-bold transition">
+                                            class="w-6 h-6 rounded-md bg-slate-800 hover:bg-rose-950/60 hover:text-rose-300 text-slate-100 border border-slate-700 flex items-center justify-center text-xs font-bold transition">
                                         −
                                     </button>
                                     <span class="min-w-10 text-center font-semibold text-slate-100">{{ $stock->quantity }}</span>
                                     <button wire:click="increment({{ $stock->id }})"
                                             title="Tambah stok (+1)"
                                             aria-label="Tambah stok {{ $stock->name }}"
-                                            class="w-6 h-6 rounded-md bg-slate-800 hover:bg-emerald-950/60 hover:text-emerald-400 text-slate-200 border border-slate-700 flex items-center justify-center text-xs font-bold transition">
+                                            class="w-6 h-6 rounded-md bg-slate-800 hover:bg-emerald-950/60 hover:text-emerald-300 text-slate-100 border border-slate-700 flex items-center justify-center text-xs font-bold transition">
                                         +
                                     </button>
                                 </div>
                             </td>
-                            <td class="py-3.5 px-4 text-xs font-mono text-slate-300">
+                            <td class="py-3.5 px-4 text-xs font-mono text-slate-200">
                                 {{ $stock->unit }}
                             </td>
                             <td class="py-3.5 px-4 text-right font-mono tabular-nums text-slate-100">
@@ -205,7 +209,7 @@
                                 @endif
                             </td>
                             <td class="py-3.5 px-4 text-center">
-                                <span class="inline-block px-2.5 py-0.5 text-xs font-medium rounded-full {{ $stock->status->badgeClass() }}">
+                                <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full {{ $stock->status->badgeClass() }}">
                                     {{ $stock->status->label() }}
                                 </span>
                             </td>
@@ -213,12 +217,12 @@
                                 <div class="flex items-center justify-end gap-2">
                                     <button wire:click="openEditModal({{ $stock->id }})"
                                             aria-label="Edit {{ $stock->name }}"
-                                            class="px-2.5 py-1 rounded-md text-xs font-medium text-slate-200 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition">
+                                            class="px-2.5 py-1 rounded-md text-xs font-medium text-slate-100 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition">
                                         Edit
                                     </button>
                                     <button wire:click="confirmDelete({{ $stock->id }})"
                                             aria-label="Hapus {{ $stock->name }}"
-                                            class="px-2.5 py-1 rounded-md text-xs font-medium text-rose-300 hover:text-rose-200 bg-rose-950/40 hover:bg-rose-900/50 border border-rose-900/50 transition">
+                                            class="px-2.5 py-1 rounded-md text-xs font-medium text-rose-300 hover:text-rose-200 bg-rose-950/50 hover:bg-rose-900/60 border border-rose-900/60 transition">
                                         Hapus
                                     </button>
                                 </div>
@@ -336,7 +340,6 @@
                     <div wire:ignore class="rounded-lg overflow-hidden border border-slate-700">
                         <div x-ref="editorContainer"></div>
                     </div>
-                    <!-- Hidden textarea fallback for Livewire binding -->
                     <textarea wire:model="description" class="hidden"></textarea>
                 </div>
 
@@ -364,7 +367,7 @@
     </div>
     @endif
 
-    <!-- MODAL 2: IMPORT EXCEL (.xlsx, .xls, .csv) -->
+    <!-- MODAL 2: IMPORT EXCEL -->
     @if($showImportModal)
     <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl text-slate-100 p-6">
@@ -444,6 +447,7 @@
                         @endif
 
                         <button wire:click="generateAi"
+                                aria-label="Generate item stok menggunakan AI"
                                 class="w-full py-2.5 px-4 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs shadow-md shadow-purple-600/20 transition flex items-center justify-center gap-2"
                                 wire:loading.attr="disabled">
                             <span wire:loading.remove>Generate Item Stok</span>
