@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-950 dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-950 dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -65,6 +65,58 @@
             background-color: #090d16 !important;
             border: 1px solid #334155 !important;
         }
+
+        /* ===== A11y: kontras Toast UI Editor (WCAG AA >= 4.5:1) ===== */
+        .toastui-editor-defaultUI .toastui-editor-mode-switch,
+        .toastui-editor-defaultUI .toastui-editor-mode-switch .tab-item {
+            background-color: #0f172a !important;
+            color: #cbd5e1 !important;
+            border-color: #334155 !important;
+        }
+        .toastui-editor-defaultUI .toastui-editor-mode-switch .tab-item.active {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+        }
+        .toastui-editor-defaultUI .toastui-editor-md-tab-container .tab-item,
+        .toastui-editor-defaultUI .toastui-editor-tabs .tab-item {
+            background-color: #1e293b !important;
+            color: #cbd5e1 !important;
+        }
+        .toastui-editor-defaultUI .toastui-editor-md-tab-container .tab-item.active,
+        .toastui-editor-defaultUI .toastui-editor-tabs .tab-item.active {
+            color: #ffffff !important;
+        }
+        .toastui-editor-defaultUI .ProseMirror,
+        .toastui-editor-md-container .toastui-editor-md-preview,
+        .toastui-editor-ww-container .toastui-editor-contents {
+            background-color: #0f172a !important;
+            color: #e2e8f0 !important;
+        }
+        .toastui-editor-defaultUI .ProseMirror .placeholder,
+        .toastui-editor-defaultUI .placeholder {
+            color: #cbd5e1 !important;
+        }
+        .toastui-editor-md-container .ProseMirror [class*="toastui-editor-md-"] {
+            color: #e2e8f0 !important;
+        }
+        .toastui-editor-md-container .ProseMirror .toastui-editor-md-heading,
+        .toastui-editor-md-container .ProseMirror .toastui-editor-md-strong { color: #93c5fd !important; }
+        .toastui-editor-md-container .ProseMirror .toastui-editor-md-link,
+        .toastui-editor-md-container .ProseMirror .toastui-editor-md-link-url { color: #a5b4fc !important; }
+        .toastui-editor-md-container .ProseMirror .toastui-editor-md-code,
+        .toastui-editor-md-container .ProseMirror .toastui-editor-md-code-block { color: #7dd3fc !important; }
+        .toastui-editor-md-container .ProseMirror .toastui-editor-md-delimiter,
+        .toastui-editor-md-container .ProseMirror .toastui-editor-md-meta { color: #cbd5e1 !important; }
+        .toastui-editor-contents a { color: #a5b4fc !important; }
+        .toastui-editor-contents blockquote,
+        .toastui-editor-contents blockquote p { color: #cbd5e1 !important; }
+        .toastui-editor-contents table th { background-color: #1e293b !important; color: #f8fafc !important; }
+        .toastui-editor-contents table td { color: #e2e8f0 !important; }
+        .toastui-editor-popup, .toastui-editor-popup-body { background-color: #0f172a !important; color: #e2e8f0 !important; }
+        .toastui-editor-popup label, .toastui-editor-popup-body label { color: #e2e8f0 !important; }
+        .toastui-editor-popup input[type="text"], .toastui-editor-popup input[type="number"] {
+            background-color: #020617 !important; color: #f8fafc !important; border-color: #475569 !important;
+        }
         .tabular-nums {
             font-variant-numeric: tabular-nums;
         }
@@ -80,7 +132,7 @@
                 <div class="flex justify-between h-16">
                     <div class="flex items-center gap-8">
                         <a href="{{ url('/') }}" class="flex items-center gap-2.5 text-white font-bold tracking-tight text-lg group" aria-label="StockPro Beranda">
-                            <span class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-sm shadow-indigo-500/20 shadow-md group-hover:bg-indigo-500 transition">
+                            <span class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-sm shadow-indigo-500/20 shadow-md group-hover:bg-indigo-700 transition">
                                 ⚡
                             </span>
                             <span class="tracking-wider">Stock<span class="text-indigo-400">Pro</span></span>
@@ -135,7 +187,7 @@
                             <a href="{{ route('login') }}" class="px-3.5 py-1.5 text-xs font-semibold text-slate-100 hover:text-white rounded-lg hover:bg-slate-800 transition">
                                 Masuk
                             </a>
-                            <a href="{{ route('register') }}" class="px-3.5 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-sm transition">
+                            <a href="{{ route('register') }}" class="px-3.5 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm transition">
                                 Daftar
                             </a>
                         @endauth
@@ -173,6 +225,66 @@
             StockPro &copy; {{ date('Y') }} — Sleek Dark Theme Inventory Management System
         </footer>
     </div>
+
+
+    <script>
+        /* ===== A11y helper: urutan heading & nama aksesibel Toast UI ===== */
+        (function () {
+            // Heading di dalam konten markdown selalu dimulai dari level 3 dan
+            // tidak pernah melompat lebih dari satu level (hindari axe "heading-order").
+            function normalizeHeadings(container) {
+                var prev = 2;
+                container.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(function (h) {
+                    var orig = parseInt(h.tagName.charAt(1), 10);
+                    var level = Math.min(Math.max(orig + 2, 3), prev + 1, 6);
+                    if (h.getAttribute('aria-level') !== String(level)) {
+                        h.setAttribute('role', 'heading');
+                        h.setAttribute('aria-level', String(level));
+                    }
+                    prev = level;
+                });
+            }
+
+            // Beri nama aksesibel pada elemen internal Toast UI yang tidak punya label.
+            function labelEditorInternals(root) {
+                root.querySelectorAll('.toastui-editor-md-container .ProseMirror').forEach(function (el) {
+                    if (!el.getAttribute('aria-label')) {
+                        el.setAttribute('role', 'textbox');
+                        el.setAttribute('aria-multiline', 'true');
+                        el.setAttribute('aria-label', 'Editor deskripsi (Markdown)');
+                    }
+                });
+                root.querySelectorAll('.toastui-editor-ww-container .ProseMirror').forEach(function (el) {
+                    if (!el.getAttribute('aria-label')) {
+                        el.setAttribute('role', 'textbox');
+                        el.setAttribute('aria-multiline', 'true');
+                        el.setAttribute('aria-label', 'Editor deskripsi (WYSIWYG)');
+                    }
+                });
+                root.querySelectorAll('.toastui-editor-defaultUI input, .toastui-editor-defaultUI textarea, .toastui-editor-defaultUI select').forEach(function (el) {
+                    if (el.type === 'hidden' || el.getAttribute('aria-label') || el.getAttribute('aria-labelledby') || el.id && document.querySelector('label[for="' + el.id + '"]')) return;
+                    el.setAttribute('aria-label', el.getAttribute('placeholder') || el.getAttribute('title') || 'Input editor');
+                });
+                root.querySelectorAll('.toastui-editor-defaultUI button').forEach(function (el) {
+                    if (el.getAttribute('aria-label') || el.textContent.trim() !== '') return;
+                    var t = el.getAttribute('title') || el.getAttribute('data-tooltip') || el.className.replace(/toastui-editor-|\s+/g, ' ').trim();
+                    el.setAttribute('aria-label', t || 'Tombol editor');
+                });
+            }
+
+            var timer = null;
+            function run() {
+                document.querySelectorAll('.toastui-editor-contents').forEach(normalizeHeadings);
+                labelEditorInternals(document);
+            }
+            function schedule() { clearTimeout(timer); timer = setTimeout(run, 50); }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                run();
+                new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
+            });
+        })();
+    </script>
 
     @livewireScripts
 </body>

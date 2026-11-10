@@ -1,7 +1,7 @@
 <div class="space-y-6">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-100">Manajemen Pengguna & Inventaris</h1>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-100">Manajemen Pengguna &amp; Inventaris</h1>
             <p class="text-xs text-slate-300 mt-1">Daftar seluruh pengguna terdaftar beserta ringkasan macam stok inventaris masing-masing.</p>
         </div>
         <span class="px-3 py-1 rounded-lg text-xs font-mono uppercase bg-indigo-950/50 text-indigo-300 border border-indigo-500/30">
@@ -12,7 +12,7 @@
     <!-- Filter / Search -->
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
         <div class="relative max-w-md">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-sm" aria-hidden="true">🔍</span>
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-300 text-sm" aria-hidden="true">🔍</span>
             <label for="admin-user-search" class="sr-only">Cari pengguna berdasarkan nama atau username</label>
             <input type="text"
                    id="admin-user-search"
@@ -67,7 +67,7 @@
                             </td>
                             <td class="py-3.5 px-4 text-right">
                                 <a href="{{ route('admin.users.stocks', $user->id) }}"
-                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition shadow-sm">
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition shadow-sm">
                                     <span>Lihat Stok</span>
                                     <span>&rarr;</span>
                                 </a>

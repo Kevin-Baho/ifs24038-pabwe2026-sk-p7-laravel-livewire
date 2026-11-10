@@ -119,7 +119,7 @@
 
                 <button wire:click="openCreateModal"
                         aria-label="Tambah stok barang baru"
-                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/20 transition">
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 transition">
                     <span>+</span>
                     <span>Tambah Stok</span>
                 </button>
@@ -235,7 +235,7 @@
                                     <span class="text-4xl">📦</span>
                                     <h2 class="mt-3 text-base font-semibold text-slate-200">Belum ada barang di inventaris</h2>
                                     <p class="mt-1 text-xs text-slate-200">Mulai tambahkan produk baru, impor file spreadsheet, atau buat otomatis menggunakan AI Generator.</p>
-                                    <button wire:click="openCreateModal" class="mt-4 px-4 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">
+                                    <button wire:click="openCreateModal" class="mt-4 px-4 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition">
                                         + Tambah Stok Sekarang
                                     </button>
                                 </div>
@@ -334,13 +334,13 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">
+                    <span id="editor-desc-label" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">
                         Deskripsi Spesifikasi (Toast UI Editor - Markdown)
-                    </label>
-                    <div wire:ignore class="rounded-lg overflow-hidden border border-slate-700">
+                    </span>
+                    <div wire:ignore role="group" aria-labelledby="editor-desc-label" class="rounded-lg overflow-hidden border border-slate-700">
                         <div x-ref="editorContainer"></div>
                     </div>
-                    <textarea wire:model="description" class="hidden"></textarea>
+                    <textarea wire:model="description" class="hidden" aria-hidden="true" tabindex="-1" aria-label="Deskripsi (disinkronkan dari editor)"></textarea>
                 </div>
 
                 <div>
@@ -356,7 +356,7 @@
                         Batal
                     </button>
                     <button type="submit"
-                            class="px-5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/20 transition"
+                            class="px-5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 transition"
                             wire:loading.attr="disabled">
                         <span wire:loading.remove>Simpan Barang</span>
                         <span wire:loading>Menyimpan...</span>
@@ -399,7 +399,7 @@
                         Batal
                     </button>
                     <button type="submit"
-                            class="px-5 py-2 rounded-lg text-xs font-semibold bg-amber-600 hover:bg-amber-500 text-white shadow-md shadow-amber-600/20 transition"
+                            class="px-5 py-2 rounded-lg text-xs font-semibold bg-amber-700 hover:bg-amber-800 text-white shadow-md shadow-amber-700/20 transition"
                             wire:loading.attr="disabled">
                         <span wire:loading.remove>Proses Import</span>
                         <span wire:loading>Mengunggah...</span>
@@ -448,7 +448,7 @@
 
                         <button wire:click="generateAi"
                                 aria-label="Generate item stok menggunakan AI"
-                                class="w-full py-2.5 px-4 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs shadow-md shadow-purple-600/20 transition flex items-center justify-center gap-2"
+                                class="w-full py-2.5 px-4 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs shadow-md shadow-purple-600/20 transition flex items-center justify-center gap-2"
                                 wire:loading.attr="disabled">
                             <span wire:loading.remove>Generate Item Stok</span>
                             <span wire:loading class="flex items-center gap-2">
@@ -497,7 +497,7 @@
                                 &larr; Generate Ulang
                             </button>
                             <button wire:click="saveAiItems"
-                                    class="px-5 py-2 rounded-lg text-xs font-semibold bg-purple-600 hover:bg-purple-500 text-white shadow-md shadow-purple-600/20 transition">
+                                    class="px-5 py-2 rounded-lg text-xs font-semibold bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-600/20 transition">
                                 Simpan Item Terpilih
                             </button>
                         </div>
@@ -530,7 +530,7 @@
                     Batal
                 </button>
                 <button type="button" wire:click="executeDelete"
-                        class="px-5 py-2 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/20 transition">
+                        class="px-5 py-2 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white shadow-md shadow-rose-600/20 transition">
                     Hapus Permanen
                 </button>
             </div>

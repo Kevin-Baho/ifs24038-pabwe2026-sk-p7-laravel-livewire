@@ -27,7 +27,7 @@
                 <label for="profilePhotoInput" class="sr-only">Upload Foto Profil Baru</label>
                 <input type="file" wire:model="photo" id="profilePhotoInput" aria-label="Upload Foto Profil Baru" accept="image/*" class="hidden">
                 
-                <button type="button" onclick="document.getElementById('profilePhotoInput').click()" aria-label="Upload Foto Baru" class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                <button type="button" onclick="document.getElementById('profilePhotoInput').click()" aria-label="Upload Foto Baru" class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
                     Upload Foto Baru
                 </button>
 
@@ -70,7 +70,7 @@
                     </div>
 
                     <div class="flex justify-end pt-2">
-                        <button type="submit" aria-label="Simpan Perubahan Identitas" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                        <button type="submit" aria-label="Simpan Perubahan Identitas" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
                             Simpan Perubahan
                         </button>
                     </div>

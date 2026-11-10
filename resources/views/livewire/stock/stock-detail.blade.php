@@ -12,7 +12,7 @@
             <div class="flex items-center gap-2">
                 <button wire:click="openEditModal"
                         aria-label="Edit Informasi Barang"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition flex items-center gap-1.5">
+                        class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition flex items-center gap-1.5">
                     <span>✏️</span>
                     <span>Edit Informasi Barang</span>
                 </button>
@@ -51,7 +51,7 @@
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
                             <button wire:click="removeCover"
                                     aria-label="Hapus Foto Cover"
-                                    class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-500 text-white transition">
+                                    class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white transition">
                                 Hapus Cover
                             </button>
                         </div>
@@ -70,7 +70,7 @@
                         @if($cover)
                             <button wire:click="updateCover"
                                     aria-label="Simpan Foto Cover Baru"
-                                    class="mt-2 w-full py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">
+                                    class="mt-2 w-full py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition">
                                 Simpan Foto Baru
                             </button>
                         @endif
@@ -281,13 +281,13 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">
+                    <span id="editor-desc-label" class="block text-xs font-semibold text-slate-200 uppercase tracking-wider mb-1.5">
                         Deskripsi Spesifikasi (Toast UI Editor - Markdown)
-                    </label>
-                    <div wire:ignore class="rounded-lg overflow-hidden border border-slate-700">
+                    </span>
+                    <div wire:ignore role="group" aria-labelledby="editor-desc-label" class="rounded-lg overflow-hidden border border-slate-700">
                         <div x-ref="detailEditorContainer"></div>
                     </div>
-                    <textarea wire:model="description" class="hidden"></textarea>
+                    <textarea wire:model="description" class="hidden" aria-hidden="true" tabindex="-1" aria-label="Deskripsi (disinkronkan dari editor)"></textarea>
                 </div>
 
                 <div>
@@ -302,7 +302,7 @@
                         Batal
                     </button>
                     <button type="submit"
-                            class="px-5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/20 transition">
+                            class="px-5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 transition">
                         Simpan Perubahan
                     </button>
                 </div>

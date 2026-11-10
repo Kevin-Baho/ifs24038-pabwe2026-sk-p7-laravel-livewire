@@ -27,7 +27,7 @@
     <!-- Search Toolbar -->
     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
         <div class="relative max-w-md">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-sm">🔍</span>
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-300 text-sm">🔍</span>
             <label for="admin-stock-search" class="sr-only">Cari nama barang atau SKU milik pengguna</label>
             <input id="admin-stock-search"
                    type="text"
