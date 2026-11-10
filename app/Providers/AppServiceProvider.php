@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Providers;
 
 use App\Features\Ai\Contracts\AiClientInterface;
@@ -15,38 +13,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     */
     public function register(): void
     {
         $this->app->bind(StockRepositoryInterface::class, StockRepository::class);
-        $this->app->bind(AiClientInterface::class, function () {
-            return new OpenAiStockGeneratorService();
-        });
+        $this->app->bind(AiClientInterface::class, OpenAiStockGeneratorService::class);
     }
 
+    /**
+     * Bootstrap any application services.
+     */
     public function boot(): void
     {
-        // Force HTTPS in production or when FORCE_HTTPS=true
-        // Wrapped in try/catch so it never crashes when UrlGenerator is not yet ready
-        try {
-            if (
-                config('app.force_https', false)
-                || $this->app->environment('production')
-            ) {
-                URL::forceScheme('https');
-            }
-        } catch (\Throwable) {
-            // UrlGenerator may not be bound yet during early bootstrap; safe to skip
+        if (config('app.force_https', false) || $this->app->environment('production')) {
+            URL::forceScheme('https');
         }
 
-        // Register policies
         Gate::policy(Stock::class, StockPolicy::class);
 
-        // Rate limiters: 1000 request/sec
         RateLimiter::for('1000-per-second', function (Request $request) {
             return Limit::perSecond(1000)->by($request->user()?->id ?: $request->ip());
         });
@@ -58,8 +48,5 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perSecond(1000)->by($request->user()?->id ?: $request->ip());
         });
-
-        // Register layout hint path
-        View::addNamespace('layouts', resource_path('views/components/layouts'));
     }
 }
