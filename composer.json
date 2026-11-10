@@ -77,7 +77,6 @@
                 "laravel/pail",
                 "laravel/pao",
                 "laravel/roster",
-                "laravel/tinker",
                 "nunomaduro/collision",
                 "nunomaduro/termwind"
             ]
