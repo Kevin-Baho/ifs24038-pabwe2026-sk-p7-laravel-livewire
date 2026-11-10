@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Providers;
 
 use App\Features\Ai\Contracts\AiClientInterface;
+use App\Features\Ai\Services\OpenAiStockGeneratorService;
 use App\Features\Stock\Contracts\StockRepositoryInterface;
 use App\Features\Stock\Models\Stock;
 use App\Features\Stock\Policies\StockPolicy;
@@ -25,6 +26,13 @@ class AppServiceProviderTest extends TestCase
 
         $this->assertTrue($this->app->bound(StockRepositoryInterface::class));
         $this->assertTrue($this->app->bound(AiClientInterface::class));
+        $this->assertTrue($this->app->bound(OpenAiStockGeneratorService::class));
+
+        $ai = $this->app->make(AiClientInterface::class);
+        $this->assertInstanceOf(OpenAiStockGeneratorService::class, $ai);
+
+        $generator = $this->app->make(OpenAiStockGeneratorService::class);
+        $this->assertInstanceOf(OpenAiStockGeneratorService::class, $generator);
     }
 
     public function test_policies_and_rate_limiters(): void

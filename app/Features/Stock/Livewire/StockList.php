@@ -244,7 +244,7 @@ class StockList extends Component
             $items = $generator->generate($this->aiTheme, 5);
             $this->aiItems    = array_map(fn (GeneratedStockItem $i): array => $i->toArray(), $items);
             $this->aiSelected = array_fill(0, count($this->aiItems), true);
-        } catch (RuntimeException $e) {
+        } catch (\Throwable $e) {
             $this->aiError = $e->getMessage();
         } finally {
             $this->aiLoading = false;

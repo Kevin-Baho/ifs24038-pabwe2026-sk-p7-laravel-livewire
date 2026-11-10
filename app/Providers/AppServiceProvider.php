@@ -22,7 +22,20 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(StockRepositoryInterface::class, StockRepository::class);
-        $this->app->bind(AiClientInterface::class, OpenAiStockGeneratorService::class);
+        $this->app->bind(AiClientInterface::class, function () {
+            return new OpenAiStockGeneratorService();
+        });
+        $this->app->bind(OpenAiStockGeneratorService::class, function ($app) {
+            $client = $app->bound(AiClientInterface::class)
+                ? $app->make(AiClientInterface::class)
+                : null;
+
+            if ($client instanceof OpenAiStockGeneratorService) {
+                return new OpenAiStockGeneratorService(null);
+            }
+
+            return new OpenAiStockGeneratorService($client);
+        });
     }
 
     public function boot(): void
