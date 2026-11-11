@@ -257,26 +257,46 @@
     <!-- MODAL 1: FORM CREATE / EDIT (With Toast UI Editor) -->
     @if($showFormModal)
     <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <!-- Toast UI Editor (Loaded only when form modal is opened) -->
+        <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+        <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
+        <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
         <div role="dialog" aria-modal="true" aria-labelledby="form-modal-title" class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl text-slate-100"
              x-data="{
                 description: @entangle('description'),
                 initEditor() {
                     const el = this.$refs.editorContainer;
                     if (!el) return;
-                    el.innerHTML = '';
-                    const editor = new toastui.Editor({
-                        el: el,
-                        height: '240px',
-                        initialEditType: 'markdown',
-                        previewStyle: 'vertical',
-                        theme: 'dark',
-                        initialValue: this.description || '',
-                        events: {
-                            change: () => {
-                                this.description = editor.getMarkdown();
-                            }
+                    const render = () => {
+                        el.innerHTML = '';
+                        if (window.toastui && window.toastui.Editor) {
+                            const editor = new toastui.Editor({
+                                el: el,
+                                height: '240px',
+                                initialEditType: 'markdown',
+                                previewStyle: 'vertical',
+                                theme: 'dark',
+                                initialValue: this.description || '',
+                                events: {
+                                    change: () => {
+                                        this.description = editor.getMarkdown();
+                                    }
+                                }
+                            });
                         }
-                    });
+                    };
+                    if (window.toastui && window.toastui.Editor) {
+                        render();
+                    } else {
+                        const check = setInterval(() => {
+                            if (window.toastui && window.toastui.Editor) {
+                                clearInterval(check);
+                                render();
+                            }
+                        }, 50);
+                        setTimeout(() => clearInterval(check), 4000);
+                    }
                 }
              }"
              x-init="$nextTick(() => initEditor())">

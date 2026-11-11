@@ -8,24 +8,13 @@
     <meta name="robots" content="index, follow">
     <title>{{ config('app.name', 'StockPro') }} - @yield('title', 'Sistem Manajemen Stok & Inventaris')</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Toast UI Editor & Viewer -->
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js" defer></script>
-
-    <!-- Cropper.js -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" defer></script>
+    @stack('styles')
 
     <style>
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #020617;
             color: #f8fafc;
         }
@@ -65,8 +54,6 @@
             background-color: #090d16 !important;
             border: 1px solid #334155 !important;
         }
-
-        /* ===== A11y: kontras Toast UI Editor (WCAG AA >= 4.5:1) ===== */
         .toastui-editor-defaultUI .toastui-editor-mode-switch,
         .toastui-editor-defaultUI .toastui-editor-mode-switch .tab-item {
             background-color: #0f172a !important;
@@ -166,7 +153,8 @@
                     <div class="flex items-center space-x-3">
                         @auth
                             <div class="flex items-center gap-3">
-                                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-slate-800/60 transition group" aria-label="Buka Profil Pengguna">
+                                <!-- TANPA aria-label agar tidak konflik dengan visible text nama user -->
+                                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-slate-800/60 transition group">
                                     <img src="{{ auth()->user()->profilePhotoUrl() }}" alt="{{ auth()->user()->name }}"
                                          class="w-7 h-7 rounded-full object-cover ring-1 ring-slate-700 group-hover:ring-indigo-500 transition">
                                     <div class="hidden md:block text-left text-xs">
@@ -180,8 +168,8 @@
 
                                 <form method="POST" action="{{ route('logout') }}" class="inline">
                                     @csrf
+                                    <!-- Tombol logout memiliki teks "Keluar", jadi tidak perlu aria-label tambahan -->
                                     <button type="submit"
-                                            aria-label="Keluar dari akun"
                                             class="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-200 hover:text-white hover:bg-rose-950/60 border border-rose-800 transition">
                                         Keluar
                                     </button>
@@ -224,7 +212,7 @@
             @yield('content')
         </main>
 
-        <!-- Footer High Contrast (Lolos WCAG AAA) -->
+        <!-- Footer High Contrast -->
         <footer class="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-slate-200 font-mono">
             StockPro &copy; {{ date('Y') }} — Sleek Dark Theme Inventory Management System
         </footer>
@@ -232,10 +220,8 @@
 
 
     <script>
-        /* ===== A11y helper: urutan heading & nama aksesibel Toast UI ===== */
+        /* ===== A11y helper ===== */
         (function () {
-            // Heading di dalam konten markdown selalu dimulai dari level 3 dan
-            // tidak pernah melompat lebih dari satu level (hindari axe "heading-order").
             function normalizeHeadings(container) {
                 var prev = 2;
                 container.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(function (h) {
@@ -249,7 +235,6 @@
                 });
             }
 
-            // Beri nama aksesibel pada elemen internal Toast UI yang tidak punya label.
             function labelEditorInternals(root) {
                 root.querySelectorAll('.toastui-editor-md-container .ProseMirror').forEach(function (el) {
                     if (!el.getAttribute('aria-label')) {
@@ -290,6 +275,7 @@
         })();
     </script>
 
+    @stack('scripts')
     @livewireScripts
 </body>
 </html>

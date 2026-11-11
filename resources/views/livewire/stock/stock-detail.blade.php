@@ -1,4 +1,9 @@
 <div>
+    <!-- Toast UI Editor & Viewer (Loaded only on stock detail view) -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
     <!-- Back Navigation & Actions -->
     <div class="flex items-center justify-between gap-4 mb-6">
         <a href="{{ route('stocks.index') }}"
@@ -173,16 +178,30 @@
                         markdown: @js($stock->description ?? ''),
                         initViewer() {
                             const el = this.$refs.viewerContainer;
-                            if (!el) return;
-                            el.innerHTML = '';
-                            if (!this.markdown) return;
-                            toastui.Editor.factory({
-                                el: el,
-                                viewer: true,
-                                height: 'auto',
-                                theme: 'dark',
-                                initialValue: this.markdown
-                            });
+                            if (!el || !this.markdown) return;
+                            const render = () => {
+                                el.innerHTML = '';
+                                if (window.toastui && window.toastui.Editor) {
+                                    toastui.Editor.factory({
+                                        el: el,
+                                        viewer: true,
+                                        height: 'auto',
+                                        theme: 'dark',
+                                        initialValue: this.markdown
+                                    });
+                                }
+                            };
+                            if (window.toastui && window.toastui.Editor) {
+                                render();
+                            } else {
+                                const check = setInterval(() => {
+                                    if (window.toastui && window.toastui.Editor) {
+                                        clearInterval(check);
+                                        render();
+                                    }
+                                }, 50);
+                                setTimeout(() => clearInterval(check), 4000);
+                            }
                         }
                      }"
                      x-init="$nextTick(() => initViewer())"
@@ -213,20 +232,35 @@
                 initEditor() {
                     const el = this.$refs.detailEditorContainer;
                     if (!el) return;
-                    el.innerHTML = '';
-                    const editor = new toastui.Editor({
-                        el: el,
-                        height: '240px',
-                        initialEditType: 'markdown',
-                        previewStyle: 'vertical',
-                        theme: 'dark',
-                        initialValue: this.description || '',
-                        events: {
-                            change: () => {
-                                this.description = editor.getMarkdown();
-                            }
+                    const render = () => {
+                        el.innerHTML = '';
+                        if (window.toastui && window.toastui.Editor) {
+                            const editor = new toastui.Editor({
+                                el: el,
+                                height: '240px',
+                                initialEditType: 'markdown',
+                                previewStyle: 'vertical',
+                                theme: 'dark',
+                                initialValue: this.description || '',
+                                events: {
+                                    change: () => {
+                                        this.description = editor.getMarkdown();
+                                    }
+                                }
+                            });
                         }
-                    });
+                    };
+                    if (window.toastui && window.toastui.Editor) {
+                        render();
+                    } else {
+                        const check = setInterval(() => {
+                            if (window.toastui && window.toastui.Editor) {
+                                clearInterval(check);
+                                render();
+                            }
+                        }, 50);
+                        setTimeout(() => clearInterval(check), 4000);
+                    }
                 }
              }"
              x-init="$nextTick(() => initEditor())">
