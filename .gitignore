@@ -34,3 +34,6 @@ clover.xml
 *.sarif
 trivy-results.sarif
 latest-app.zip
+
+# Keep template SQLite for fast Vercel cold-start
+!database/template.sqlite

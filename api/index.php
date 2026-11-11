@@ -42,11 +42,18 @@ try {
         mkdir($storagePath . '/app/public', 0755, true);
     }
 
-    // 5. Setup SQLite di /tmp
-    $dbFile        = '/tmp/database.sqlite';
-    $needMigration = !file_exists($dbFile) || filesize($dbFile) === 0;
-    if (!file_exists($dbFile)) {
-        touch($dbFile);
+    // 5. Setup SQLite di /tmp dengan template instan (memangkas TTFB cold start hingga ~700ms)
+    $dbFile       = '/tmp/database.sqlite';
+    $seedTemplate = __DIR__ . '/../database/template.sqlite';
+    $needMigration = false;
+
+    if (!file_exists($dbFile) || filesize($dbFile) === 0) {
+        if (file_exists($seedTemplate) && filesize($seedTemplate) > 0) {
+            copy($seedTemplate, $dbFile);
+        } else {
+            touch($dbFile);
+            $needMigration = true;
+        }
     }
     putenv('DB_CONNECTION=sqlite');
     putenv("DB_DATABASE={$dbFile}");

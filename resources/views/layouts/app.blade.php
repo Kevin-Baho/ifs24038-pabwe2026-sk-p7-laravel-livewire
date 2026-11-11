@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="StockPro - Sistem Manajemen Stok & Inventaris Barang berbasis web modern dengan Livewire dan Sleek Dark Theme.">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <title>{{ config('app.name', 'StockPro') }} - @yield('title', 'Sistem Manajemen Stok & Inventaris')</title>
+
+    <!-- DNS-Prefetch & Preconnect untuk memotong rantai request kritis -->
+    <link rel="preconnect" href="https://uicdn.toast.com" crossorigin>
+    <link rel="dns-prefetch" href="https://uicdn.toast.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -273,6 +279,13 @@
                 new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
             });
         })();
+
+        // bfcache (Back/Forward Cache) handler
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted && window.Livewire) {
+                window.Livewire.dispatch('$refresh');
+            }
+        });
     </script>
 
     @stack('scripts')
